@@ -26,7 +26,7 @@ function TmdbApiCall() {
       setLoading(false);
     }
     fetchData();
-  }, []);
+  }, [moviesData]);
 
   if (loading) {
     return <h5 className="container">Cargando...</h5>;

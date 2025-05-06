@@ -13,7 +13,8 @@ const Video = ({url, subtitle}) => {
           src={subtitle}  
           srcLang="es"  
           default/>
-          Sorry, your browser doesn't support videos.
+         Sorry, your browser doesn&#39;t support videos.
+
         </video>
        
       </>
