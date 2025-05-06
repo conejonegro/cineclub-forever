@@ -2,6 +2,7 @@ import { getAuth, signOut } from "firebase/auth";
 import "../css/profile.css";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import Image from "next/image";
 
 function Logout({}) {
   const userDataString = localStorage.getItem("userData");
