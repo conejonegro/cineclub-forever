@@ -5,6 +5,7 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "@/components/UserProvider"; // 🔥 Importar el contexto
+import Image from "next/image";
 
 function Logout() {
   const router = useRouter();
@@ -58,7 +59,7 @@ function Logout() {
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Perfil</h1>
 
         {userData.photoURL && (
-          <img
+          <Image
             src={userData.photoURL}
             alt={`${userData.displayName} Photo`}
             className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -6,7 +7,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Logo + descripción */}
         <div>
-          <img
+          <Image
             src="/cineclub-logo.png"
             alt="Cineclub Logo"
             className="h-12 mb-4"

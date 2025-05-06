@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React, { useContext } from "react";
 import { UserContext } from "./UserProvider";
+import Image from "next/image";
 // import DarkModeBTN from "./darkModeBTN/DarkModeBTN";
 
 const navItems = [
@@ -21,7 +22,7 @@ export default function NavComponent() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <img
+          <Image
             src="/cineclub-logo.png"
             alt="Cineclub Logo"
             className="h-8 w-auto"

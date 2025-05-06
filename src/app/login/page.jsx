@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState, useContext } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { UserContext } from "@/components/UserProvider";
+import Image from "next/image";
 
 const provider = new GoogleAuthProvider();
 
@@ -64,7 +65,7 @@ function Login() {
     <section className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <div className="flex justify-center mb-6">
-          <img
+          <Image
             src="/cineclub-logo.png"
             alt="Cineclub logo"
             className="w-32 h-auto"

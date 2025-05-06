@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import TMDBApiCall from "../utils/TMBDApiCall";
 import { Subtitles } from "../utils/subtitles";
+import Image from "next/image";
 import "../css/home-page.css";
 import "../css/pelicula.css";
 
@@ -88,7 +89,7 @@ function TmdbApiCall() {
             return (
               <div className="movie-container" key={post.id}>
                 <Link to={"/peliculas-detalle/" + post.slug}>
-                  <img
+                  <Image
                     src={IMG_PATH + post.poster}
                     alt={post.nombre}
                     className="poster "

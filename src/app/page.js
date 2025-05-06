@@ -37,7 +37,7 @@ export default function HomePage() {
 
     // Se invoca la función al montar el componente
     fetchData();
-  }, []);
+  }, [moviesData]);
 
   // Mientras los datos se están cargando, se muestra un mensaje
   if (loading) {
