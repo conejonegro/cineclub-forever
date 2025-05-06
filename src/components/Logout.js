@@ -55,7 +55,7 @@ function Logout({}) {
         </Helmet>
         <h1>Perfil:</h1>
         {userData.photoURL ? (
-          <img src={userData.photoURL} alt={`${userData.displayName} Photo`} />
+          <Image src={userData.photoURL} alt={`${userData.displayName} Photo`} />
         ) : (
           ""
         )}

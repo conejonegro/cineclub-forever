@@ -62,7 +62,7 @@ function TmdbApiCall() {
             return (
               <div className="movie-container" key={post.id}>
                 <Link to={"/peliculas-detalle/" + post.slug}>
-                  <img
+                  <Image
                     src={IMG_PATH + post.poster}
                     alt={post.nombre}
                     className="poster "

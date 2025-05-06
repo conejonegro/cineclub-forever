@@ -9,6 +9,7 @@ import Link from "next/link";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import getCredits from "@/lib/TMDB_credits_call";
 import "@/app/globals.css";
+import Image from "next/image"; 
 
 function PeliculaDetalle() {
   const IMG_PATH = process.env.NEXT_PUBLIC_IMG_PATH;
@@ -116,7 +117,7 @@ function PeliculaDetalle() {
           <div className="max-w-6xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
             <div className="flex flex-col md:flex-row gap-6">
               <div className="md:w-1/3">
-                <img
+                <Image
                   src={IMG_PATH + (peliculaActual.poster || "")}
                   alt="Poster descriptivo"
                   className="rounded-lg w-full shadow-md"
