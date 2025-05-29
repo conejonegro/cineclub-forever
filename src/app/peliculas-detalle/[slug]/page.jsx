@@ -121,6 +121,8 @@ function PeliculaDetalle() {
                   src={IMG_PATH + (peliculaActual.poster || "")}
                   alt="Poster descriptivo"
                   className="rounded-lg w-full shadow-md"
+                  width={300}
+                  height={450}
                 />
               </div>
               <div className="md:w-2/3 space-y-4">

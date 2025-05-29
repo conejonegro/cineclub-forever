@@ -11,6 +11,8 @@ export default function Footer() {
             src="/cineclub-logo.png"
             alt="Cineclub Logo"
             className="h-12 mb-4"
+            width={48}
+            height={48}
           />
           <p className="text-sm text-gray-300">
             Streaming de Películas seleccionadas por <strong>Cineclub Forever<sup>®</sup></strong> en Guadalajara, Jalisco, México. Sitio creado por <strong>TRLVDSGN<sup>™</sup></strong>.

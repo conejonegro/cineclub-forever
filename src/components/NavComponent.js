@@ -26,6 +26,8 @@ export default function NavComponent() {
             src="/cineclub-logo.png"
             alt="Cineclub Logo"
             className="h-8 w-auto"
+            width={32}
+            height={32}
           />
           <span className={`text-xl font-bold ${darkMode ? "text-white" : "text-black"}`}>
             Cineclub Forever

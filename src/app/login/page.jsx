@@ -69,6 +69,8 @@ function Login() {
             src="/cineclub-logo.png"
             alt="Cineclub logo"
             className="w-32 h-auto"
+            width={128}
+            height={128}
           />
         </div>
 
