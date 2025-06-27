@@ -37,7 +37,9 @@ export default function HomePage() {
 
     // Se invoca la función al montar el componente
     fetchData();
-  }, [moviesData]);
+  }, []);
+
+  console.log("misposts", posts);
 
   // Mientras los datos se están cargando, se muestra un mensaje
   if (loading) {
@@ -62,6 +64,7 @@ export default function HomePage() {
               {/* Imagen del póster de la película */}
               <Image
                 src={`${IMG_PATH}${movie.poster}`}
+                priority
                 alt={movie.title}
                 width={500}
                 height={750}
