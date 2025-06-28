@@ -61,6 +61,8 @@ function Logout() {
         {userData.photoURL && (
           <Image
             src={userData.photoURL}
+            width={96}
+            height={96}
             alt={`${userData.displayName} Photo`}
             className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
           />

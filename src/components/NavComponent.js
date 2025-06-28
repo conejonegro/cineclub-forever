@@ -11,7 +11,10 @@ const navItems = [
 ];
 
 export default function NavComponent() {
-  const { darkMode, user } = useContext(UserContext) || { darkMode: false, user: false };
+  const { darkMode, user } = useContext(UserContext);
+
+  // user console log
+  console.log("User in NavComponent:", user);
 
   return (
     <nav
@@ -51,12 +54,12 @@ export default function NavComponent() {
               >
                 Iniciar Sesión
               </Link>
-              <Link
+             {/*<Link
                 href="/registro"
                 className="text-sm text-blue-400 hover:underline"
               >
                 Registro
-              </Link>
+              </Link> */} 
             </>
           )}
         </div>

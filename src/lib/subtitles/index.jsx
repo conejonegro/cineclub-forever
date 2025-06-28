@@ -1,12 +1,12 @@
 export const Subtitles = () => {
   const sutitlesObject = [ 
     {
-      tmdb_ID: "931944",
-      name: "el-baño-del-diablo",
-      videoSrc: "https://mcseguros.com.mx/cineclub/the-devils-bath.mp4",
-      subtitlePath: "/static/subtitles/the-devils-bath-subs-esp.vtt",
-      ciclo: "Libre",
-      propuestaPor: "Argenis",
+      tmdb_ID: "1050035",
+      name: "monstruo",
+      videoSrc: "https://mcseguros.com.mx/cineclub/monster.mp4",
+      subtitlePath: "/static/subtitles/monster-subs-esp.vtt",
+      ciclo: "Orgullo Gay",
+      propuestaPor: "Mingo Morales",
     },
     {
       tmdb_ID: "1064486",
@@ -63,13 +63,6 @@ export const Subtitles = () => {
       subtitlePath: "/static/subtitles/emilia-perez-subs.vtt",
       ciclo: "Libre",
       propuestaPor: "Cineclub Forever",
-    },
-    {
-      tmdb_ID: "50272",
-      name: "somos-lo-que-hay",
-      videoSrc: "https://mcseguros.com.mx/cineclub/somos-lo-que-hay.mp4",
-      ciclo: "Teens",
-      propuestaPor: "Eric",
     },
     {
       tmdb_ID: "23655",

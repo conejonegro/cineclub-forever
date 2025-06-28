@@ -74,7 +74,7 @@ function Login() {
           />
         </div>
 
-        <h2 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-black">Iniciar Sesión</h2>
 
         <div className="flex flex-col gap-4 mb-6">
           {/* Botón de Google */}
@@ -92,7 +92,7 @@ function Login() {
             <hr className="flex-grow border-gray-300" />
           </div>
 
-          {/* Inputs Email y Password */}
+          {/* Inputs Email y Password 
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-gray-600 text-sm mb-1">
@@ -121,18 +121,18 @@ function Login() {
                 placeholder="Ingresa tu contraseña"
               />
             </div>
-          </div>
+          </div> */}
 
-          {/* Botón de login con correo y contraseña */}
+          {/* Botón de login con correo y contraseña 
           <button
             onClick={userPasswordLogin}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-xl transition duration-200 mt-4"
           >
             Iniciar sesión con correo
-          </button>
+          </button> */}
         </div>
 
-        {/* Recordarme y Olvidaste contraseña */}
+        {/* Recordarme y Olvidaste contraseña 
         <div className="flex justify-between items-center mt-4">
           <div className="flex items-center gap-2">
             <input type="checkbox" id="remember" className="accent-primary-500" />
@@ -143,15 +143,15 @@ function Login() {
           <a href="#!" className="text-sm text-primary-500 hover:underline">
             ¿Olvidaste tu contraseña?
           </a>
-        </div>
+        </div> */}
 
-        {/* Registro */}
+        {/* Registro 
         <p className="text-center text-sm text-gray-600 mt-6">
           ¿No tienes cuenta?{" "}
           <Link href="/registro" className="text-primary-500 font-bold hover:underline">
             Regístrate
           </Link>
-        </p>
+        </p>*/}
 
         {/* Toasts */}
         <Toaster />
