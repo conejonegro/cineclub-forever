@@ -73,17 +73,12 @@ export default function HomePage() {
             >
               {/* Imagen del póster de la película */}
               <Image
-                src={
-                  movie.poster.startsWith("http")
-                    ? movie.poster
-                    : `${IMG_PATH}${movie.poster.startsWith("/") ? "" : "/"}${movie.poster}`
-                }
+                src={IMG_PATH + movie.poster}
                 priority
                 alt={movie.title}
                 width={500}
                 height={750}
                 className="w-full object-cover"
-                unoptimized={process.env.NODE_ENV === "development"}
               />
 
               {/* Información de la película */}
