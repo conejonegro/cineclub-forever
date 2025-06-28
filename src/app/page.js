@@ -41,6 +41,16 @@ export default function HomePage() {
 
   console.log("misposts", posts);
 
+  posts.forEach((movie) => {
+     console.log("IMG_PATH", IMG_PATH + movie.poster) 
+    // Se verifica si la película tiene un póster
+    if (!movie.poster) {
+      // Si no tiene, se asigna una imagen por defecto
+     
+      movie.poster = "default-poster.jpg"; // Asegúrate de tener esta imagen en tu carpeta pública
+    }
+  } );
+
   // Mientras los datos se están cargando, se muestra un mensaje
   if (loading) {
     return <h5 className="text-center mt-10 text-lg">Cargando...</h5>;
@@ -63,12 +73,17 @@ export default function HomePage() {
             >
               {/* Imagen del póster de la película */}
               <Image
-                src={`${IMG_PATH}${movie.poster}`}
+                src={
+                  movie.poster.startsWith("http")
+                    ? movie.poster
+                    : `${IMG_PATH}${movie.poster.startsWith("/") ? "" : "/"}${movie.poster}`
+                }
                 priority
                 alt={movie.title}
                 width={500}
                 height={750}
                 className="w-full object-cover"
+                unoptimized={process.env.NODE_ENV === "development"}
               />
 
               {/* Información de la película */}
