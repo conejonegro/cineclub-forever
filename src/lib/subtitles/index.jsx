@@ -1,6 +1,22 @@
 export const Subtitles = () => {
   const sutitlesObject = [ 
     {
+      tmdb_ID: "674324",
+      name: "espiritus-de-la-isla",
+      videoSrc: "https://mcseguros.com.mx/cineclub/banshees.mp4",
+      subtitlePath: "/static/subtitles/monster-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "Alma",
+    },
+    {
+      tmdb_ID: "1239655",
+      name: "amistad",
+      videoSrc: "https://mcseguros.com.mx/cineclub/friendship.mp4",
+      subtitlePath: "/static/subtitles/monster-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Mariana",
+    },
+    {
       tmdb_ID: "1050035",
       name: "monstruo",
       videoSrc: "https://mcseguros.com.mx/cineclub/monster.mp4",
