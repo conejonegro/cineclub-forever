@@ -20,7 +20,7 @@ export const Subtitles = () => {
       tmdb_ID: "1050035",
       name: "monstruo",
       videoSrc: "https://mcseguros.com.mx/cineclub/monster.mp4",
-      subtitlePath: "/subtitles/monster-subs-esp.vtt",
+      subtitlePath: "/subtitles/monster.vtt",
       ciclo: "Orgullo Gay",
       propuestaPor: "Mingo Morales",
     },
