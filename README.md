@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Cineclub Forever
 
-## Getting Started
+**Cineclub Forever** es una aplicación web desarrollada con [Next.js](https://nextjs.org/) que recomienda películas utilizando datos de TMDB y muestra información relevante como póster, sinopsis y fecha de estreno.
 
-First, run the development server:
+## Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Listado de películas recomendadas
+- Detalle de cada película
+- Imágenes optimizadas con Next.js
+- Integración con la API de TMDB
+- Estilos con Tailwind CSS
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalación
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. Clona el repositorio:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone https://github.com/tu-usuario/cineclub-forever.git
+   cd cineclub-forever
+   ```
 
-## Learn More
+2. Instala las dependencias:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Crea un archivo `.env.local` y agrega tus variables de entorno:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```
+   NEXT_PUBLIC_IMG_PATH=/ruta/a/imagenes/
+   TMDB_API_KEY=tu_api_key
+   ```
 
-## Deploy on Vercel
+4. Inicia el servidor de desarrollo:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Estructura del Proyecto
+
+- `/src/app` - Componentes principales y páginas
+- `/src/lib` - Funciones auxiliares y llamadas a la API
+- `/public` - Imágenes y recursos estáticos
+
+## Tecnologías
+
+- Next.js
+- React
+- Tailwind CSS
+- TMDB API
+- Firebase
+
+## Contribuir
+
+¡Las contribuciones son bienvenidas! Haz un fork del repositorio y envía tu pull request.
+
+## Licencia
+
+Este proyecto está bajo la licencia MIT.
+
+---
+
+Desarrollado con ❤️ por [conejo_negro](https://trlvdsgn.website)
