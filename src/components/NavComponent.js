@@ -7,7 +7,7 @@ import Image from "next/image";
 // import DarkModeBTN from "./darkModeBTN/DarkModeBTN";
 
 const navItems = [
-  { text: "Películas", item_url: "/peliculas" },
+  { text: "Reviews", item_url: "/reviews" }, // Solo Reviews
 ];
 
 export default function NavComponent() {
@@ -36,6 +36,19 @@ export default function NavComponent() {
             Cineclub Forever
           </span>
         </Link>
+
+        {/* Navegación */}
+        <div className="flex items-center gap-6">
+          {navItems.map((item) => (
+            <Link
+              key={item.item_url}
+              href={item.item_url}
+              className={`text-sm font-medium ${darkMode ? "text-white" : "text-gray-800"} hover:underline`}
+            >
+              {item.text}
+            </Link>
+          ))}
+        </div>
 
         {/* Login/Logout */}
         <div className="flex items-center gap-4">

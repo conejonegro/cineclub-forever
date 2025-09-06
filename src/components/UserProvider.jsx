@@ -1,29 +1,29 @@
-'use client';
+"use client";
 
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./FirebaseSettings"; // asegúrate de importar correctamente
 
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
-  const [user, setUser] = useState(false);
-
+  // Dark mode (sin cambios)
   const [darkMode, setDarkMode] = useState(() => {
-
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       return localStorage.getItem("darkmode") === "true";
     }
     return false;
   });
 
-   useEffect(() => {
-      const userDataString = localStorage.getItem("userData");
-      if (userDataString) {
-        setUser(JSON.parse(userDataString));
-      } else {
-        setUser(null);
-      }
-    }, []);
+  // Escuchar sesión de usuario en tiempo real
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("darkmode", darkMode);

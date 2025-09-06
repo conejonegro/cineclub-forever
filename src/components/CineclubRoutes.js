@@ -13,6 +13,7 @@ import Registro from "../../pages/Registro";
 import ProtectedRoutes from "./ProtectedRoutes";
 import Ciclos from "../../pages/Ciclos";
 import { CicloDetalle } from "../../pages/CicloDetalle";
+import ReviewsBlogPage  from "../app/reviews/";
 
 function CineclubRoutes(){
     return(
@@ -27,6 +28,7 @@ function CineclubRoutes(){
                 <Route path="/contacto" element={<Contacto /> } />
                 <Route path="/peliculas-detalle/:slug" element={ <PeliculaDetalle /> } />
                 <Route path="/ciclos/:slug" element={ <CicloDetalle /> } />
+                <Route path="/reviews" element={ <ReviewsBlogPage /> } /> {/* Nueva ruta para Reviews */}
                 <Route element={<ProtectedRoutes />}>
                     <Route path="/login" element={ <Login /> } />
                     <Route path="/registro" element={ <Registro /> } />

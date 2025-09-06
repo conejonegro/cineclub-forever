@@ -9,6 +9,11 @@
 - Imágenes optimizadas con Next.js
 - Integración con la API de TMDB
 - Estilos con Tailwind CSS
+<<<<<<< HEAD
+=======
+- Reproductor de video con subtítulos
+- Autenticación de usuario con Firebase
+>>>>>>> blog-reviews
 
 ## Instalación
 

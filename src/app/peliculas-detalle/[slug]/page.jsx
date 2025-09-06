@@ -10,6 +10,8 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import getCredits from "@/lib/TMDB_credits_call";
 import "@/app/globals.css";
 import Image from "next/image"; 
+import { useContext } from "react";
+import { UserContext } from "@/components/UserProvider";
 
 function PeliculaDetalle() {
   const IMG_PATH = process.env.NEXT_PUBLIC_IMG_PATH;
@@ -18,15 +20,9 @@ function PeliculaDetalle() {
   const [loading, setLoading] = useState(true);
   const [rDate, setRDate] = useState(null);
   const [alertMessage, setAlertMessage] = useState(null);
-  const [userData, setUserData] = useState(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const userDataString = localStorage.getItem("userData");
-      const parsedData = JSON.parse(userDataString);
-      setUserData(parsedData);
-    }
-  }, []);
+const { user: userData } = useContext(UserContext);
+
 
   const moviesData =  Subtitles();
   const router = useParams();
