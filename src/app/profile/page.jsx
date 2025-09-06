@@ -10,28 +10,21 @@ import Image from "next/image";
 function Logout() {
   const router = useRouter();
   const { setUser } = useContext(UserContext); // 🔥 Tomamos setUser global
-  const [userData, setUserData] = useState(undefined);
 
-  useEffect(() => {
-    const userDataString = localStorage.getItem("userData");
-    if (userDataString) {
-      setUserData(JSON.parse(userDataString));
-    } else {
-      setUserData(null);
-    }
-  }, []);
 
-  async function logOutFromCineclub() {
-    try {
-      await signOut(auth);
-      localStorage.removeItem("userData");
-      setUserData(null);        // Local logout
-      setUser(false);           // 🔥 Muy importante: Actualizamos el contexto
-      router.push("/");         // Redirigir a home
-    } catch (error) {
-      console.error("Error cerrando sesión:", error.message);
-    }
+const { user: userData } = useContext(UserContext);
+
+
+async function logOutFromCineclub() {
+  try {
+    await signOut(auth);
+    setUser(null);           // ✅ Esto es lo correcto
+    router.push("/");        // ✅ Redirige a home
+  } catch (error) {
+    console.error("Error cerrando sesión:", error.message);
   }
+}
+
 
   if (userData === undefined) {
     return (

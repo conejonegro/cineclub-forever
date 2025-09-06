@@ -30,7 +30,7 @@ function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      localStorage.setItem("userData", JSON.stringify(user));
+      //localStorage.setItem("userData", JSON.stringify(user));
       setUser(true);
       toast.success("¡Inicio de sesión exitoso con Google! 🎉");
       router.push("/");
