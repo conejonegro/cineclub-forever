@@ -18,9 +18,7 @@ const firebaseConfig = {
 // Inicializamos la app solo si no existe
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Inicializamos auth y database
 const auth = getAuth(app);
-export const db = getFirestore(app);
+const db = getFirestore(app);
 
-// Exportamos lo que necesitemos
-export { auth };
+export { app, auth, db }; // <-- ahora sí exporta app

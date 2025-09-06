@@ -1,15 +1,16 @@
+// src/components/UserProvider.jsx
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./FirebaseSettings"; // asegúrate de importar correctamente
+import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { app } from "./FirebaseSettings"; // o "@/components/FirebaseSettings"
 
-export const UserContext = createContext();
+export const UserContext = createContext({ user: undefined });
 
-const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+export default function UserProvider({ children }) {
+  const [user, setUser] = useState(undefined); // <-- undefined = cargando
 
-  // Dark mode (sin cambios)
+  // Dark mode (igual que antes)
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("darkmode") === "true";
@@ -17,21 +18,21 @@ const UserProvider = ({ children }) => {
     return false;
   });
 
-  // Escuchar sesión de usuario en tiempo real
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+    const auth = getAuth(app);
+    // Asegura persistencia local (evita que se “olvide” tras refresh)
+    setPersistence(auth, browserLocalPersistence).finally(() => {
+      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        setUser(firebaseUser ?? null); // null si no hay sesión
+      });
+      // Limpieza
+      return () => unsubscribe();
     });
-    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
     localStorage.setItem("darkmode", darkMode);
-    if (darkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
+    document.body.classList.toggle("dark-mode", darkMode);
   }, [darkMode]);
 
   return (
@@ -39,6 +40,4 @@ const UserProvider = ({ children }) => {
       {children}
     </UserContext.Provider>
   );
-};
-
-export { UserProvider };
+}
