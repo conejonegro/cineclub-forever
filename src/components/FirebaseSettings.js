@@ -2,7 +2,7 @@
 
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -20,7 +20,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // Inicializamos auth y database
 const auth = getAuth(app);
-const database = getDatabase(app);
+export const db = getFirestore(app);
 
 // Exportamos lo que necesitemos
-export { auth, database };
+export { auth, db };
