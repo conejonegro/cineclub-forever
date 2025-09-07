@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [ 
     {
+      tmdb_ID: "510",
+      name: "atrapado-sin-salida",
+      videoSrc: "https://mcseguros.com.mx/cineclub/cukoos-nest.mp4",
+      subtitlePath: "/subtitles/cuckos-nest-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "Mariana Nunez",
+    },
+    {
       tmdb_ID: "970947",
       name: "the-shrouds",
       videoSrc: "https://mcseguros.com.mx/cineclub/the-shrouds.mp4",
