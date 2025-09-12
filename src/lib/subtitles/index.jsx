@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [ 
     {
+      tmdb_ID: "1078605",
+      name: "la-hora-de-la-desaparicion",
+      videoSrc: "https://mcseguros.com.mx/cineclub/weapons.mp4",
+      subtitlePath: "/subtitles/weapons-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "Alfred",
+    },
+    {
       tmdb_ID: "510",
       name: "atrapado-sin-salida",
       videoSrc: "https://mcseguros.com.mx/cineclub/cukoos-nest.mp4",
@@ -46,14 +54,6 @@ export const Subtitles = () => {
       videoSrc: "https://mcseguros.com.mx/cineclub/memorias-de-un-caracol.mp4",
       subtitlePath: "/subtitles/memorias-de-un-caracol-subs-esp.vtt",
       ciclo: "Oscares",
-      propuestaPor: "Cineclub Forever",
-    },
-    {
-      tmdb_ID: "1059128",
-      name: "queer",
-      videoSrc: "https://mcseguros.com.mx/cineclub/queer-movie.mp4",
-      subtitlePath: "/subtitles/queer-subs-esp.vtt",
-      ciclo: "Libre",
       propuestaPor: "Cineclub Forever",
     },
     {

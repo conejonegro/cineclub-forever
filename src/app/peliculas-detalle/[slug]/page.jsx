@@ -93,6 +93,8 @@ const { user: userData } = useContext(UserContext);
         try {
           const fetchedCredits = await getCredits(peliculaActual.id);
           setCredits(fetchedCredits);
+          //console.log("Pelicula ID:", peliculaActual);
+          console.log("Creditos", fetchedCredits);
         } catch (error) {
           console.error("Error al obtener créditos:", error);
         }
@@ -127,7 +129,7 @@ const { user: userData } = useContext(UserContext);
                 </h1>
                 <p>
                   <span className="font-semibold">Director:</span>{" "}
-                  {credits?.name || "Desconocido"}
+                  {credits || "Desconocido"}
                 </p>
                 <p>
                   <span className="font-semibold">Fecha de Lanzamiento:</span>{" "}
