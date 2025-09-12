@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
       description: peliculaActual?.sinopsis,
       images: [
         {
-          url: IMG_PATH + (peliculaActual?.poster || ""),
+          url: IMG_PATH + (peliculaActual?.backdrop || peliculaActual?.poster || ""),
           width: 600,
           height: 900,
           alt: peliculaActual?.title,

@@ -35,6 +35,7 @@ export default function TMDBApiCall(dataArray) {
 
       // Extraemos la data de cada respuesta
       const postData = responses.map((response) => response.data);
+      console.log("postData raw", postData);
 
       // Formateamos la data para quedarnos solo con los campos necesarios
       const postDataFormated = postData?.map((post) => ({
@@ -45,6 +46,7 @@ export default function TMDBApiCall(dataArray) {
         sinopsis: post.overview, // Sinopsis de la película
         release_date: post.release_date, // Fecha de estreno
         genero: post.genres.map((g) => g.name), // Géneros de la película
+        backdrop: post.backdrop_path, // Imagen de fondo
       }));
 
       console.log("postData TMDB", postData)
