@@ -50,14 +50,12 @@ export default async function PeliculaDetalle({ params }) {
 
 
   // Fetch credits
-  const credits = peliculaActual?.id
+  const director = peliculaActual?.id
     ? await getCredits(peliculaActual.id)
     : null;
 
-  // Director (solo string si hay uno)
-  const director = Array.isArray(credits)
-    ? credits.map((c) => c.name).join(", ")
-    : credits;
+
+
 
   const index = posts.findIndex((post) => post.slug === slug);
   const prevPost = posts[(index - 1 + posts.length) % posts.length];
