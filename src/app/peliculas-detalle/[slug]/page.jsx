@@ -1,3 +1,5 @@
+export const revalidate = 3600; /
+
 import Image from "next/image";
 import Link from "next/link";
 import { GrNext, GrPrevious } from "react-icons/gr";
@@ -8,7 +10,6 @@ import getCredits from "@/lib/TMDB_credits_call";
 
 export async function generateMetadata({ params }) {
   const slug = params.slug;
-  console.log("Generating metadata for slug:", slug);
 
   // 👉 Llamada a tu API interna de TMDB
   const moviesData = Subtitles();
