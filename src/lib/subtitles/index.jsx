@@ -3,7 +3,7 @@ export const Subtitles = () => {
     {
       tmdb_ID: "1078605",
       name: "la-hora-de-la-desaparicion",
-      videoSrc: "https://mcseguros.com.mx/cineclub/weapons.mp4",
+      videoSrc: "https://mcseguros.com.mx/cineclub/la-hora.mp4",
       subtitlePath: "/subtitles/weapons-subs-esp.vtt",
       ciclo:"Libre",
       propuestaPor: "Alfred",
