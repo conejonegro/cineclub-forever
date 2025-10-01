@@ -1,5 +1,13 @@
-export const Subtitles = () => {
+export const Subtitles = () => { 
   const sutitlesObject = [ 
+    {
+      tmdb_ID: "1245993",
+      name: "atrapado-robando",
+      videoSrc: "https://mcseguros.com.mx/cineclub/atrapado-robando.mp4",
+      subtitlePath: "/subtitles/atrapado-robando-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "Cone",
+    },
     {
       tmdb_ID: "1078605",
       name: "la-hora-de-la-desaparicion",
