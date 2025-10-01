@@ -1,5 +1,13 @@
-export const Subtitles = () => { 
+export const Subtitles = () => {  
   const sutitlesObject = [ 
+    {
+      tmdb_ID: "2654",
+      name: "en-la-boca-del-miedo",
+      videoSrc: "https://mcseguros.com.mx/cineclub/en-la-boca-del-miedo.mp4",
+      subtitlePath: "/subtitles/en-la-boca-del-miedo-subs-esp.vtt",
+      ciclo:"Halloween",
+      propuestaPor: "Alfred",
+    },
     {
       tmdb_ID: "1245993",
       name: "atrapado-robando",
