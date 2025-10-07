@@ -24,10 +24,6 @@ export default function ReviewContent({ review }) {
         {review.titulo}
       </h1>
 
-      <p className="text-lg text-gray-900 font-semibold mb-6">
-        {review.descripcion}
-      </p>
-
       <div
         className="prose prose-lg text-gray-900 font-normal mb-8"
         dangerouslySetInnerHTML={{ __html: review.contenido }}
