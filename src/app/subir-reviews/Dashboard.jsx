@@ -1,15 +1,9 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { db } from "@/components/FirebaseSettings";
-import { fetchReviewBySlug } from "@/lib/getReviews/reviews";
-import { deleteDoc, doc }  from "firebase/firestore";
-import {
-  setDoc,
-  updateDoc,
-  getDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { fetchReviewBySlug, toSlug } from "@/lib/getReviews/reviews";
+import { deleteDoc, doc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 
 export default function SubirReviewDashboard() {
   const [activeTab, setActiveTab] = useState("crear"); // o 'editar'
@@ -49,7 +43,6 @@ export default function SubirReviewDashboard() {
   );
 }
 
-
 function FormularioCrear() {
   const [form, setForm] = useState({
     slug: "",
@@ -73,9 +66,12 @@ function FormularioCrear() {
     setError(null);
 
     try {
-      const ref = doc(db, "reviews", form.slug);
+      const id = toSlug(form.slug || form.titulo);
+      if (!id) throw new Error("Slug o título inválido");
+      const ref = doc(db, "reviews", id);
       await setDoc(ref, {
         ...form,
+        slug: id,
         published: true,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -120,56 +116,60 @@ function FormularioEditar() {
   const [status, setStatus] = useState(null);
 
   const fetchReview = async () => {
-  setStatus("loading");
-
-  const data = await fetchReviewBySlug(slugInput);
-  if (data) {
-    setForm(data);
-    setStatus("loaded");
-  } else {
-    setStatus("notfound");
-    setForm(null);
-  }
-};
+    setStatus("loading");
+    const data = await fetchReviewBySlug(slugInput);
+    if (data) {
+      setForm(data);
+      setStatus("loaded");
+    } else {
+      setStatus("notfound");
+      setForm(null);
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-const handleUpdate = async (e) => {
-  e.preventDefault();
-  if (!form) return;
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!form) return;
 
-  try {
-    const ref = doc(db, "reviews", form.id); // ✅ usamos el ID real
-    await updateDoc(ref, {
-      ...form,
-      updatedAt: serverTimestamp(),
-    });
-    setStatus("updated");
-  } catch (err) {
-    console.error(err);
-    setStatus("error");
-  }
-};
+    try {
+      const id = toSlug(form.id || form.slug || form.titulo);
+      if (!id) throw new Error("ID/slug/título inválido");
+      const ref = doc(db, "reviews", id);
+      await updateDoc(ref, {
+        ...form,
+        slug: id,
+        updatedAt: serverTimestamp(),
+      });
+      setStatus("updated");
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
+  };
 
-const handleDelete = async () => {
-  const confirm = window.confirm("¿Estás seguro de que quieres eliminar esta reseña? Esta acción no se puede deshacer.");
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "¿Estás seguro de que quieres eliminar esta reseña? Esta acción no se puede deshacer."
+    );
+    if (!confirmDelete) return;
 
-  if (!confirm) return;
-
-  try {
-    const ref = doc(db, "reviews", form.id); // usamos el ID real
-    await deleteDoc(ref);
-    setStatus("deleted");
-    setForm(null);
-    setSlugInput("");
-  } catch (err) {
-    console.error(err);
-    setStatus("delete-error");
-  }
-};
-
+    try {
+      const id = toSlug(form.id || form.slug || form.titulo);
+      if (!id) throw new Error("ID/slug/título inválido");
+      const ref = doc(db, "reviews", id);
+      await deleteDoc(ref);
+      setStatus("deleted");
+      setForm(null);
+      setSlugInput("");
+    } catch (err) {
+      console.error(err);
+      setStatus("delete-error");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -193,48 +193,44 @@ const handleDelete = async () => {
         <p className="text-red-500">No se encontró ninguna reseña con ese slug.</p>
       )}
 
-     {form && (
-  <form onSubmit={handleUpdate} className="space-y-4">
-    <CamposFormulario form={form} handleChange={handleChange} />
+      {form && (
+        <form onSubmit={handleUpdate} className="space-y-4">
+          <CamposFormulario form={form} handleChange={handleChange} />
 
-    <div className="flex gap-4">
-      <button
-        type="submit"
-        className="bg-green-600 text-white px-4 py-2 rounded font-semibold hover:bg-green-700"
-      >
-        Guardar cambios
-      </button>
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              className="bg-green-600 text-white px-4 py-2 rounded font-semibold hover:bg-green-700"
+            >
+              Guardar cambios
+            </button>
 
-      {/* Botón rojo de eliminar */}
-      <button
-        type="button"
-        onClick={handleDelete}
-        className="bg-red-600 text-white px-4 py-2 rounded font-semibold hover:bg-red-700"
-      >
-        Eliminar reseña
-      </button>
-    </div>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="bg-red-600 text-white px-4 py-2 rounded font-semibold hover:bg-red-700"
+            >
+              Eliminar reseña
+            </button>
+          </div>
 
-    {status === "updated" && (
-      <p className="text-green-600 font-medium">✅ Cambios guardados</p>
-    )}
-    {status === "error" && (
-      <p className="text-red-600 font-medium">❌ Error al actualizar</p>
-    )}
-    {status === "deleted" && (
-      <p className="text-red-500 font-medium">🗑️ Reseña eliminada con éxito</p>
-    )}
-    {status === "delete-error" && (
-      <p className="text-red-600 font-medium">❌ Error al eliminar la reseña</p>
-    )}
-  </form>
-)}
-
+          {status === "updated" && (
+            <p className="text-green-600 font-medium">✅ Cambios guardados</p>
+          )}
+          {status === "error" && (
+            <p className="text-red-600 font-medium">❌ Error al actualizar</p>
+          )}
+          {status === "deleted" && (
+            <p className="text-red-500 font-medium">🗑️ Reseña eliminada con éxito</p>
+          )}
+          {status === "delete-error" && (
+            <p className="text-red-600 font-medium">❌ Error al eliminar la reseña</p>
+          )}
+        </form>
+      )}
     </div>
   );
 }
-
-
 
 function CamposFormulario({ form, handleChange }) {
   return (
@@ -274,4 +270,3 @@ function CamposFormulario({ form, handleChange }) {
     </>
   );
 }
-

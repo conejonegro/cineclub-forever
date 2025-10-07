@@ -1,8 +1,42 @@
 import { db } from "@/components/FirebaseSettings";
 import {
-  collection, doc, getDoc, getDocs,
-  query, where, orderBy, limit, serverTimestamp
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp,
 } from "firebase/firestore";
+
+// Normaliza títulos/strings a un slug en minúsculas sin espacios
+function toSlug(str = "") {
+  return String(str)
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "") // quita acentos
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+// 🔧 Helper: convierte Firestore Timestamps u objetos no serializables a JSON plano
+function convertFirestoreData(data) {
+  if (!data) return null;
+
+  return JSON.parse(
+    JSON.stringify(data, (key, value) => {
+      // convierte los timestamps en strings ISO legibles
+      if (value?.seconds) {
+        return new Date(value.seconds * 1000).toISOString();
+      }
+      return value;
+    })
+  );
+}
 
 export async function fetchPublishedReviews({ take = 24 } = {}) {
   const q = query(
@@ -12,25 +46,33 @@ export async function fetchPublishedReviews({ take = 24 } = {}) {
     limit(take)
   );
   const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  return snap.docs.map((d) => ({
+    id: d.id,
+    ...convertFirestoreData(d.data()),
+  }));
 }
 
 export async function fetchReviewBySlug(slug) {
-  const q = query(
-    collection(db, "reviews"),
-    where("slug", "==", slug),
-    limit(1)
-  );
-  const qsnap = await getDocs(q);
-  if (!qsnap.empty) {
-    const d = qsnap.docs[0];
-    return { id: d.id, ...d.data() };
+  if (!slug) return null;
+  const id = toSlug(slug);
+
+  // Intento principal
+  const ref = doc(db, "reviews", id);
+  const snap = await getDoc(ref);
+  if (snap.exists()) return { id: snap.id, ...convertFirestoreData(snap.data()) };
+
+  // Fallback: probar con el slug original (por compatibilidad)
+  if (id !== String(slug)) {
+    const refRaw = doc(db, "reviews", String(slug));
+    const snapRaw = await getDoc(refRaw);
+    if (snapRaw.exists()) return { id: snapRaw.id, ...convertFirestoreData(snapRaw.data()) };
   }
+
   return null;
 }
 
 // Ejemplo para crear (útil en un script local o página admin)
-// requiere auth activa según reglas
 export function newReviewPayload(data) {
   const now = serverTimestamp();
   return {
@@ -39,3 +81,9 @@ export function newReviewPayload(data) {
     updatedAt: now,
   };
 }
+
+// Export util
+export { toSlug };
+
+
+
