@@ -1,6 +1,14 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
     {
+      tmdb_ID: "4995",
+      name: "boogie-nights-juegos-de-placer",
+      videoSrc: "https://mcseguros.com.mx/cineclub/boogie-nights.mp4",
+      subtitlePath: "/subtitles/boogie-nights-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "Cone",
+    },
+    {
       tmdb_ID: "2654",
       name: "en-la-boca-del-miedo",
       videoSrc: "https://mcseguros.com.mx/cineclub/en-la-boca-del-miedo.mp4",
