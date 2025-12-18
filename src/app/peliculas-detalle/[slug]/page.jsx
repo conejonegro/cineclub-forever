@@ -9,7 +9,7 @@ import TMDBApiCall from "@/lib/TMBDApiCall";
 import getCredits from "@/lib/TMDB_credits_call";
 
 export async function generateMetadata({ params }) {
-  const slug = params.slug;
+  const { slug } = await params;
 
   // 👉 Llamada a tu API interna de TMDB
   const moviesData = Subtitles();
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function PeliculaDetalle({ params }) {
-  const slug = params.slug;
+  const { slug } = await params;
   const IMG_PATH = process.env.NEXT_PUBLIC_IMG_PATH;
 
   // Fetch posts
