@@ -9,6 +9,14 @@ export const Subtitles = () => {
       propuestaPor: "ConejoNegro",
     },
     {
+      tmdb_ID: "9538",
+      name: "telepatas-mentes-destructoras",
+      videoSrc: "https://mcseguros.com.mx/cineclub/scanners.mp4",
+      subtitlePath: "/subtitles/scanners-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "Cone",
+    },
+    {
       tmdb_ID: "4995",
       name: "boogie-nights-juegos-de-placer",
       videoSrc: "https://mcseguros.com.mx/cineclub/boogie-nights.mp4",
