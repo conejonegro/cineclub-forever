@@ -1,5 +1,13 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
+     {
+      tmdb_ID: "701387",
+      name: "bugonia",
+      videoSrc: "https://mcseguros.com.mx/cineclub/bugonia.mp4",
+      subtitlePath: "/subtitles/bugonia-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "ConejoNegro",
+    },
     {
       tmdb_ID: "4995",
       name: "boogie-nights-juegos-de-placer",
