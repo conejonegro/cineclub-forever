@@ -1,6 +1,14 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
-     {
+    {
+      tmdb_ID: "639988",
+      name: "no-other-choice",
+      videoSrc: "https://mcseguros.com.mx/cineclub/no-other-choice.mp4",
+      subtitlePath: "/subtitles/no-other-choice-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "ConejoNegro",
+    },
+    {
       tmdb_ID: "701387",
       name: "bugonia",
       videoSrc: "https://mcseguros.com.mx/cineclub/bugonia.mp4",
