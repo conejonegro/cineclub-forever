@@ -2,7 +2,7 @@ export const Subtitles = () => {
   const sutitlesObject = [ 
     {
       tmdb_ID: "639988",
-      name: "no-other-choice",
+      name: "la-unica-opcion",
       videoSrc: "https://mcseguros.com.mx/cineclub/no-other-choice.mp4",
       subtitlePath: "/subtitles/no-other-choice-subs-esp.vtt",
       ciclo: "Libre",
