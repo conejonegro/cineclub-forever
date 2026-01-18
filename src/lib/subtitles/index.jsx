@@ -1,6 +1,14 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
     {
+      tmdb_ID: "1151272",
+      name: "sirat",
+      videoSrc: "https://mcseguros.com.mx/cineclub/sirat.mp4",
+      subtitlePath: "/subtitles/sirat-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "ConejoNegro",
+    },
+    {
       tmdb_ID: "639988",
       name: "la-unica-opcion",
       videoSrc: "https://mcseguros.com.mx/cineclub/no-other-choice.mp4",
