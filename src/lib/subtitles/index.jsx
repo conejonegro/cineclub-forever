@@ -2,7 +2,7 @@ export const Subtitles = () => {
   const sutitlesObject = [ 
     {
       tmdb_ID: "1151272",
-      name: "sirat",
+      name: "sirat-trance-en-el-desierto",
       videoSrc: "https://mcseguros.com.mx/cineclub/sirat.mp4",
       subtitlePath: "/subtitles/sirat-subs-esp.vtt",
       ciclo: "Libre",
@@ -55,14 +55,6 @@ export const Subtitles = () => {
       subtitlePath: "/subtitles/atrapado-robando-subs-esp.vtt",
       ciclo:"Libre",
       propuestaPor: "Cone",
-    },
-    {
-      tmdb_ID: "1078605",
-      name: "la-hora-de-la-desaparicion",
-      videoSrc: "https://mcseguros.com.mx/cineclub/la-hora.mp4",
-      subtitlePath: "/subtitles/weapons-subs-esp.vtt",
-      ciclo:"Libre",
-      propuestaPor: "Alfred",
     },
     {
       tmdb_ID: "510",
