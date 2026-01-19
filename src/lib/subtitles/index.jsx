@@ -1,6 +1,14 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
     {
+      tmdb_ID: "1160360",
+      name: "si-pudiera-te-daria-una-patada",
+      videoSrc: "https://mcseguros.com.mx/cineclub/legs.mp4",
+      subtitlePath: "/subtitles/legs-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "ConejoNegro",
+    },
+    {
       tmdb_ID: "1151272",
       name: "sirat-trance-en-el-desierto",
       videoSrc: "https://mcseguros.com.mx/cineclub/sirat.mp4",
