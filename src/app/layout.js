@@ -4,7 +4,8 @@ import "./globals.css";
 import NavComponent from "@/components/NavComponent";
 import Footer from "@/components/footer/Footer";
 import  UserProvider  from "@/components/UserProvider";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
+import IntroOverlay from "@/components/IntroOverlay";
 
 export const montserrat = Montserrat({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${montserrat.variable} ${lato.variable} antialiased`}>
         <UserProvider>
+          <IntroOverlay />
           <NavComponent />
 
           {children}
