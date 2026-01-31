@@ -1,6 +1,14 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
     {
+      tmdb_ID: "2750",
+      name: "24-hour-party-people",
+      videoSrc: "https://mcseguros.com.mx/cineclub/party.mp4",
+      subtitlePath: "/subtitles/party-subs-esp.vtt",
+      ciclo: "Musica",
+      propuestaPor: "Ian",
+    },
+    {
       tmdb_ID: "1160360",
       name: "si-pudiera-te-daria-una-patada",
       videoSrc: "https://mcseguros.com.mx/cineclub/legs.mp4",
