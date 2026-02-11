@@ -2,7 +2,7 @@ export const Subtitles = () => {
   const sutitlesObject = [ 
     {
       tmdb_ID: "1317288",
-      name: "marty-supreme",
+      name: "marty-supremo",
       videoSrc: "https://mcseguros.com.mx/cineclub/marty.mp4",
       subtitlePath: "/subtitles/marty-subs-esp.vtt",
       ciclo:"Libre",
