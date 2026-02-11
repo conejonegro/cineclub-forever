@@ -1,12 +1,12 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
     {
-      tmdb_ID: "2750",
-      name: "24-hour-party-people",
-      videoSrc: "https://mcseguros.com.mx/cineclub/party.mp4",
-      subtitlePath: "/subtitles/party-subs-esp.vtt",
-      ciclo: "Musica",
-      propuestaPor: "Ian",
+      tmdb_ID: "1317288",
+      name: "marty-supreme",
+      videoSrc: "https://mcseguros.com.mx/cineclub/marty.mp4",
+      subtitlePath: "/subtitles/marty-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "ConejoNegro",
     },
     {
       tmdb_ID: "1160360",
@@ -103,7 +103,7 @@ export const Subtitles = () => {
       subtitlePath: "/subtitles/the-wild-boys-esp.vtt",
       ciclo: "Teens",
       propuestaPor: "Mingo Morales",
-    },
+    }
   ];
 
   return sutitlesObject;
