@@ -1,6 +1,14 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
     {
+      tmdb_ID: "426249",
+      name: "lords-of-chaos",
+      videoSrc: "https://mcseguros.com.mx/cineclub/lords-of-chaos.mp4",
+      subtitlePath: "/subtitles/lords-of-chaos-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "ConejoNegro",
+    },
+    {
       tmdb_ID: "1317288",
       name: "marty-supremo",
       videoSrc: "https://mcseguros.com.mx/cineclub/marty.mp4",
