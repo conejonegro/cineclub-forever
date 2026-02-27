@@ -1,6 +1,14 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
     {
+      tmdb_ID: "13222",
+      name: "the-devil-and-daniel-johnston",
+      videoSrc: "https://mcseguros.com.mx/cineclub/devil.mp4",
+      subtitlePath: "/subtitles/devil-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "ConejoNegro",
+    },
+    {
       tmdb_ID: "426249",
       name: "lords-of-chaos",
       videoSrc: "https://mcseguros.com.mx/cineclub/lords-of-chaos.mp4",
