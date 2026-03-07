@@ -1,6 +1,14 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
     {
+      tmdb_ID: "277216",
+      name: "letras-explicitas-straight-outta-compton",
+      videoSrc: "https://mcseguros.com.mx/cineclub/compton.mp4",
+      subtitlePath: "/subtitles/compton-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "Eric",
+    },
+    {
       tmdb_ID: "13222",
       name: "the-devil-and-daniel-johnston",
       videoSrc: "https://mcseguros.com.mx/cineclub/devil.mp4",
@@ -14,7 +22,7 @@ export const Subtitles = () => {
       videoSrc: "https://mcseguros.com.mx/cineclub/lords-of-chaos.mp4",
       subtitlePath: "/subtitles/lords-of-chaos-subs-esp.vtt",
       ciclo:"Libre",
-      propuestaPor: "ConejoNegro",
+      propuestaPor: "Jorge",
     },
     {
       tmdb_ID: "1317288",
@@ -30,7 +38,7 @@ export const Subtitles = () => {
       videoSrc: "https://mcseguros.com.mx/cineclub/legs.mp4",
       subtitlePath: "/subtitles/legs-subs-esp.vtt",
       ciclo: "Libre",
-      propuestaPor: "ConejoNegro",
+      propuestaPor: "Mariana M",
     },
     {
       tmdb_ID: "1151272",
@@ -38,7 +46,7 @@ export const Subtitles = () => {
       videoSrc: "https://mcseguros.com.mx/cineclub/sirat.mp4",
       subtitlePath: "/subtitles/sirat-subs-esp.vtt",
       ciclo: "Libre",
-      propuestaPor: "ConejoNegro",
+      propuestaPor: "Ian",
     },
     {
       tmdb_ID: "639988",
