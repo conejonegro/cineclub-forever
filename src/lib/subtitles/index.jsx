@@ -1,5 +1,13 @@
 export const Subtitles = () => {  
   const sutitlesObject = [ 
+     {
+      tmdb_ID: "337703",
+      name: "la-tortuga-roja",
+      videoSrc: "https://mcseguros.com.mx/cineclub/la-tortuga-roja.mp4",
+      subtitlePath: "/subtitles/la-tortuga-roja-subs-esp.vtt",
+      ciclo:"Libre",
+      propuestaPor: "Alma",
+    },
     {
       tmdb_ID: "277216",
       name: "letras-explicitas-straight-outta-compton",
@@ -47,14 +55,6 @@ export const Subtitles = () => {
       subtitlePath: "/subtitles/sirat-subs-esp.vtt",
       ciclo: "Libre",
       propuestaPor: "Ian",
-    },
-    {
-      tmdb_ID: "639988",
-      name: "la-unica-opcion",
-      videoSrc: "https://mcseguros.com.mx/cineclub/no-other-choice.mp4",
-      subtitlePath: "/subtitles/no-other-choice-subs-esp.vtt",
-      ciclo: "Libre",
-      propuestaPor: "ConejoNegro",
     },
     {
       tmdb_ID: "1245993",
