@@ -3,7 +3,7 @@ export const Subtitles = () => {
     {
       tmdb_ID: "69",
       name: "johnny-y-june-pasion-y-locura",
-      videoSrc: "https://mcseguros.com.mx/cineclub/walk-the-line.mp4",
+      videoSrc: "https://mcseguros.com.mx/cineclub/walk.mp4",
       subtitlePath: "/subtitles/walk-the-line-subs-esp.vtt",
       ciclo: "Libre",
       propuestaPor: "Victor Portillo",
