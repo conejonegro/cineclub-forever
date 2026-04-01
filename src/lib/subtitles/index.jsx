@@ -1,11 +1,19 @@
-export const Subtitles = () => {  
-  const sutitlesObject = [ 
-     {
+export const Subtitles = () => {
+  const sutitlesObject = [
+    {
+      tmdb_ID: "69",
+      name: "johnny-y-june-pasion-y-locura",
+      videoSrc: "https://mcseguros.com.mx/cineclub/walk-the-line.mp4",
+      subtitlePath: "/subtitles/walk-the-line-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Victor Portillo",
+    },
+    {
       tmdb_ID: "337703",
       name: "la-tortuga-roja",
       videoSrc: "https://mcseguros.com.mx/cineclub/la-tortuga-roja.mp4",
       subtitlePath: "/subtitles/la-tortuga-roja-subs-esp.vtt",
-      ciclo:"Libre",
+      ciclo: "Libre",
       propuestaPor: "Alma",
     },
     {
@@ -13,7 +21,7 @@ export const Subtitles = () => {
       name: "letras-explicitas-straight-outta-compton",
       videoSrc: "https://mcseguros.com.mx/cineclub/compton.mp4",
       subtitlePath: "/subtitles/compton-subs-esp.vtt",
-      ciclo:"Libre",
+      ciclo: "Libre",
       propuestaPor: "Eric",
     },
     {
@@ -21,7 +29,7 @@ export const Subtitles = () => {
       name: "the-devil-and-daniel-johnston",
       videoSrc: "https://mcseguros.com.mx/cineclub/devil.mp4",
       subtitlePath: "/subtitles/devil-subs-esp.vtt",
-      ciclo:"Libre",
+      ciclo: "Libre",
       propuestaPor: "ConejoNegro",
     },
     {
@@ -29,7 +37,7 @@ export const Subtitles = () => {
       name: "lords-of-chaos",
       videoSrc: "https://mcseguros.com.mx/cineclub/lords-of-chaos.mp4",
       subtitlePath: "/subtitles/lords-of-chaos-subs-esp.vtt",
-      ciclo:"Libre",
+      ciclo: "Libre",
       propuestaPor: "Jorge",
     },
     {
@@ -37,7 +45,7 @@ export const Subtitles = () => {
       name: "marty-supremo",
       videoSrc: "https://mcseguros.com.mx/cineclub/marty.mp4",
       subtitlePath: "/subtitles/marty-subs-esp.vtt",
-      ciclo:"Libre",
+      ciclo: "Libre",
       propuestaPor: "ConejoNegro",
     },
     {
@@ -61,7 +69,7 @@ export const Subtitles = () => {
       name: "atrapado-robando",
       videoSrc: "https://mcseguros.com.mx/cineclub/atrapado-robando.mp4",
       subtitlePath: "/subtitles/atrapado-robando-subs-esp.vtt",
-      ciclo:"Libre",
+      ciclo: "Libre",
       propuestaPor: "Cone",
     },
     {
@@ -69,7 +77,7 @@ export const Subtitles = () => {
       name: "the-shrouds",
       videoSrc: "https://mcseguros.com.mx/cineclub/the-shrouds.mp4",
       subtitlePath: "/subtitles/spanish-the-shrouds.vtt",
-      ciclo:"Libre",
+      ciclo: "Libre",
       propuestaPor: "Cone",
     },
     {
@@ -79,7 +87,7 @@ export const Subtitles = () => {
       subtitlePath: "/subtitles/the-wild-boys-esp.vtt",
       ciclo: "Teens",
       propuestaPor: "Mingo Morales",
-    }
+    },
   ];
 
   return sutitlesObject;
