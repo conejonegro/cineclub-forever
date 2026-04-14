@@ -39,10 +39,7 @@ export default function HomePage() {
     fetchData();
   }, []);
 
-  console.log("misposts", posts);
-
   posts.forEach((movie) => {
-     console.log("IMG_PATH", IMG_PATH + movie.poster) 
     // Se verifica si la película tiene un póster
     if (!movie.poster) {
       // Si no tiene, se asigna una imagen por defecto
@@ -88,6 +85,11 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-gray-700 line-clamp-3">
                   {movie.sinopsis}
                 </p>
+                {movie.propuestaPor && (
+                  <p className="mt-2 text-xs text-gray-500">
+                    Propuesta por {movie.propuestaPor}
+                  </p>
+                )}
               </div>
             </div>
           </Link>

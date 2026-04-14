@@ -79,7 +79,7 @@ export default async function PeliculaDetalle({ params }) {
           </div>
           <div className="md:w-2/3 space-y-4">
             <h1 className="text-4xl font-bold leading-tight">
-              {peliculaActual?.original_title}
+              {peliculaActual?.title}
             </h1>
             <p>
               <span className="font-semibold">Director:</span>{" "}
@@ -93,6 +93,12 @@ export default async function PeliculaDetalle({ params }) {
               <span className="font-semibold">Género:</span>{" "}
               {(peliculaActual?.genero || []).join(", ")}
             </p>
+            {movieData?.propuestaPor && (
+              <p>
+                <span className="font-semibold">Propuesta por:</span>{" "}
+                {movieData.propuestaPor}
+              </p>
+            )}
             <h5 className="font-bold mb-0">Sinopsis:</h5>
             <p className="text-gray-300">{peliculaActual?.sinopsis}</p>
           </div>

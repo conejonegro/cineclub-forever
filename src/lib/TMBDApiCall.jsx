@@ -35,7 +35,9 @@ export default function TMDBApiCall(dataArray) {
 
       // Extraemos la data de cada respuesta
       const postData = responses.map((response) => response.data);
-      console.log("postData raw", postData);
+
+      // Mapa local indexado por tmdb_ID para un cruce robusto
+      const localMap = new Map(dataArray.map(item => [String(item.tmdb_ID), item]));
 
       // Formateamos la data para quedarnos solo con los campos necesarios
       const postDataFormated = postData?.map((post) => ({
@@ -47,9 +49,8 @@ export default function TMDBApiCall(dataArray) {
         release_date: post.release_date, // Fecha de estreno
         genero: post.genres.map((g) => g.name), // Géneros de la película
         backdrop: post.backdrop_path, // Imagen de fondo
+        propuestaPor: localMap.get(String(post.id))?.propuestaPor ?? "",
       }));
-
-      console.log("postData TMDB", postData)
 
       // Retornamos la data formateada
       return postDataFormated;
