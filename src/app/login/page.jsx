@@ -31,7 +31,7 @@ function Login() {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       //localStorage.setItem("userData", JSON.stringify(user));
-      setUser(true);
+      setUser(user);
       toast.success("¡Inicio de sesión exitoso con Google! 🎉");
       router.push("/");
     } catch (error) {
@@ -45,7 +45,7 @@ function Login() {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       localStorage.setItem("userData", JSON.stringify(user));
-      setUser(true);
+      setUser(user);
       toast.success("¡Inicio de sesión exitoso! 🎉");
       router.push("/");
     } catch (error) {

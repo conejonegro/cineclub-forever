@@ -7,7 +7,8 @@ import Image from "next/image";
 // import DarkModeBTN from "./darkModeBTN/DarkModeBTN";
 
 const navItems = [
-  { text: "Reviews", item_url: "/reviews" }, // Solo Reviews
+  { text: "Reviews", item_url: "/reviews" },
+  { text: "Películas solicitadas", item_url: "/peliculas-solicitadas" },
 ];
 
 export default function NavComponent() {
@@ -53,12 +54,20 @@ export default function NavComponent() {
         {/* Login/Logout */}
         <div className="flex items-center gap-4">
           {user ? (
-            <Link
-              href="/profile"
-              className="text-sm text-blue-400 hover:underline"
-            >
-              Profile
-            </Link>
+            <>
+              <Link
+                href="/solicitar-pelicula"
+                className={`text-sm font-medium ${darkMode ? "text-white" : "text-gray-800"} hover:underline`}
+              >
+                Solicitar película
+              </Link>
+              <Link
+                href="/profile"
+                className="text-sm text-blue-400 hover:underline"
+              >
+                Profile
+              </Link>
+            </>
           ) : (
             <>
               <Link
