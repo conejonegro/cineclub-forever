@@ -65,9 +65,18 @@ export default function PeliculasSolicitadasPage() {
   return (
     <main className="max-w-2xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold mb-2 text-center">Películas solicitadas</h1>
-      <p className="text-gray-500 text-center mb-8">
+      <p className={`text-gray-500 text-center ${!user ? "mb-2" : "mb-8"}`}>
         Las películas que el cineclub ha propuesto hasta ahora.
       </p>
+      {!user && (
+        <p className="text-center text-sm text-gray-400 mb-8">
+          Para solicitar una película{" "}
+          <a href="/login" className="text-blue-400 hover:underline">
+            inicia sesión
+          </a>
+          .
+        </p>
+      )}
 
       {grouped === null ? null : grouped.length === 0 ? (
         <p className="text-gray-500 text-center">
