@@ -1,6 +1,22 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "1325734",
+      name: "el-drama",
+      videoSrc: "https://mcseguros.com.mx/cineclub/the-drama.mp4",
+      subtitlePath: "/subtitles/the-drama-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Luis",
+    },
+    {
+      tmdb_ID: "1226863",
+      name: "super-mario-galaxy-la-pelicula",
+      videoSrc: "https://mcseguros.com.mx/cineclub/mario-galaxy.mp4",
+      subtitlePath: "/subtitles/mario-galaxy-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Luis",
+    },
+    {
       tmdb_ID: "69",
       name: "johnny-y-june-pasion-y-locura",
       videoSrc: "https://mcseguros.com.mx/cineclub/walk.mp4",

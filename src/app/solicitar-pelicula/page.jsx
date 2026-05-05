@@ -65,7 +65,7 @@ export default function SolicitarPeliculaPage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
             placeholder="Tu nombre"
           />
         </div>
@@ -80,7 +80,7 @@ export default function SolicitarPeliculaPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
             placeholder="tu@correo.com"
           />
           {status === "invalid_email" && (
@@ -98,7 +98,7 @@ export default function SolicitarPeliculaPage() {
             required
             value={movieTitle}
             onChange={(e) => setMovieTitle(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
             placeholder="Título de la película"
           />
         </div>
