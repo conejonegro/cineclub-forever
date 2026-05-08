@@ -25,10 +25,12 @@ export default function PeliculasSolicitadasPage() {
       if (!title) return acc;
       const display = d.data().movie_title?.trim();
       if (!acc[title]) {
-        acc[title] = { display, count: 0, ids: [] };
+        acc[title] = { display, count: 0, ids: [], requesters: [] };
       }
       acc[title].count += 1;
       acc[title].ids.push(d.id);
+      const { name, email } = d.data();
+      if (name || email) acc[title].requesters.push({ name, email });
       return acc;
     }, {});
 
@@ -84,7 +86,7 @@ export default function PeliculasSolicitadasPage() {
         </p>
       ) : (
         <ul className="bg-white rounded-lg shadow-md divide-y divide-gray-100">
-          {grouped.map(({ display, count, ids, tmdb }) => (
+          {grouped.map(({ display, count, ids, requesters, tmdb }) => (
             <li key={display.toLowerCase()} className="flex items-center gap-4 px-6 py-4">
               {tmdb?.poster_path ? (
                 <img
@@ -106,10 +108,21 @@ export default function PeliculasSolicitadasPage() {
                     ({tmdb.vote_count.toLocaleString("es-MX")} votos)
                   </p>
                 )}
+                <p className="text-sm text-gray-500 mt-1">
+                  {count} {count === 1 ? "solicitud" : "solicitudes"}
+                </p>
+                {isAdmin && requesters.length > 0 && (
+                  <ul className="mt-1 space-y-0.5">
+                    {requesters.map((r, i) => (
+                      <li key={i} className="text-xs text-gray-400">
+                        {r.name && r.email
+                          ? `${r.name} — ${r.email}`
+                          : r.name ?? r.email}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-              <span className="text-sm text-gray-500 shrink-0">
-                {count} {count === 1 ? "solicitud" : "solicitudes"}
-              </span>
               {isAdmin && (
                 <button
                   onClick={() => handleDelete(ids, display.toLowerCase())}
