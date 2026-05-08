@@ -162,26 +162,25 @@ export default function PeliculasSolicitadasPage() {
                   </p>
                   {tmdb && (
                     <p className="text-xs text-gray-500 mt-0.5">
-                      ★ {tmdb.vote_average.toFixed(1)}{" "}
-                      ({tmdb.vote_count.toLocaleString("es-MX")} votos)
+                      ★ {tmdb.vote_average.toFixed(1)}
                     </p>
                   )}
-                  <p className="text-sm text-gray-500 mt-1">
-                    {count} {count === 1 ? "solicitud" : "solicitudes"}
-                  </p>
-                  <p className="text-sm text-gray-400 mt-0.5">
+                  <p className="text-sm text-gray-400 mt-1">
                     {voteCount} {voteCount === 1 ? "voto" : "votos"}
                   </p>
-                  {isAdmin && requesters.length > 0 && (
-                    <ul className="mt-1 space-y-0.5">
-                      {requesters.map((requester, requesterIndex) => (
-                        <li key={requesterIndex} className="text-xs text-gray-400">
-                          {requester.name && requester.email
-                            ? `${requester.name} — ${requester.email}`
-                            : requester.name ?? requester.email}
-                        </li>
-                      ))}
-                    </ul>
+                  {requesters.length > 0 && (
+                    <div className="mt-1">
+                      <p className="text-xs text-gray-400">Solicitada por</p>
+                      <ul className="space-y-0.5">
+                        {requesters.map((requester, requesterIndex) => (
+                          <li key={requesterIndex} className="text-xs text-gray-400">
+                            {requester.name && requester.email
+                              ? `${requester.name} — ${requester.email}`
+                              : requester.name ?? requester.email}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-1 shrink-0">
