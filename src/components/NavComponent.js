@@ -4,7 +4,6 @@ import Link from "next/link";
 import React, { useContext } from "react";
 import { UserContext } from "./UserProvider";
 import Image from "next/image";
-// import DarkModeBTN from "./darkModeBTN/DarkModeBTN";
 
 const navItems = [
   { text: "Reviews", item_url: "/reviews" },
@@ -12,81 +11,74 @@ const navItems = [
 ];
 
 export default function NavComponent() {
-  const { darkMode, user } = useContext(UserContext);
-
-  // user console log
-  console.log("User in NavComponent:", user);
+  const { user } = useContext(UserContext);
 
   return (
-    <nav
-      className={`w-full ${
-        darkMode ? "bg-gray-900" : "bg-white"
-      } border-b shadow-sm`}
-    >
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 w-full bg-[#0d0d0d]/80 backdrop-blur-md border-b border-white/[0.06]">
+      <div className="max-w-6xl mx-auto px-6 md:px-14 py-4 flex items-center justify-between">
+
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-3">
           <Image
             src="/cineclub-logo.png"
             alt="Cineclub Logo"
-            className="h-8 w-auto"
-            width={32}
-            height={32}
+            width={28}
+            height={28}
+            className="w-7 h-7 object-contain opacity-90"
           />
-          <span className={`text-xl font-bold ${darkMode ? "text-white" : "text-black"}`}>
+          <span
+            className="text-white/95 text-sm font-bold tracking-wide"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
             Cineclub Forever
           </span>
         </Link>
 
-        {/* Navegación */}
-        <div className="flex items-center gap-6">
+        {/* Links centrales */}
+        <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <Link
               key={item.item_url}
               href={item.item_url}
-              className={`text-sm font-medium ${darkMode ? "text-white" : "text-gray-800"} hover:underline`}
+              className="text-white/70 hover:text-white text-sm transition-colors duration-200"
+              style={{ fontFamily: "var(--font-montserrat)" }}
             >
               {item.text}
             </Link>
           ))}
         </div>
 
-        {/* Login/Logout */}
-        <div className="flex items-center gap-4">
+        {/* Auth */}
+        <div className="flex items-center gap-5">
           {user ? (
             <>
               <Link
                 href="/solicitar-pelicula"
-                className={`text-sm font-medium ${darkMode ? "text-white" : "text-gray-800"} hover:underline`}
+                className="text-white/70 hover:text-white text-sm transition-colors duration-200"
+                style={{ fontFamily: "var(--font-montserrat)" }}
               >
                 Solicitar película
               </Link>
               <Link
                 href="/profile"
-                className="text-sm text-blue-400 hover:underline"
+                className="text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors duration-200"
+                style={{ fontFamily: "var(--font-montserrat)" }}
               >
-                Profile
+                Mi perfil
               </Link>
             </>
           ) : (
-            <>
-              <Link
-                href="/login"
-                className="text-sm text-blue-400 hover:underline"
-              >
-                Iniciar Sesión
-              </Link>
-             {/*<Link
-                href="/registro"
-                className="text-sm text-blue-400 hover:underline"
-              >
-                Registro
-              </Link> */} 
-            </>
+            <Link
+              href="/login"
+              className="text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors duration-200"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              Iniciar sesión
+            </Link>
           )}
         </div>
+
       </div>
-      {/* <DarkModeBTN /> */}
     </nav>
   );
 }

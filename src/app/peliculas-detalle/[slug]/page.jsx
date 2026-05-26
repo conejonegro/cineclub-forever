@@ -1,37 +1,33 @@
-export const revalidate = 3600; 
+export const revalidate = 3600;
 
 import Image from "next/image";
 import Link from "next/link";
-import { GrNext, GrPrevious } from "react-icons/gr";
 import Video from "@/components/Video";
 import { Subtitles } from "@/lib/subtitles";
 import TMDBApiCall from "@/lib/TMBDApiCall";
 import getCredits from "@/lib/TMDB_credits_call";
 
+const BACKDROP_PATH = "https://image.tmdb.org/t/p/w1280";
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-
-  // 👉 Llamada a tu API interna de TMDB
   const moviesData = Subtitles();
   const posts = await TMDBApiCall(moviesData);
-  console.log("misposts", posts);
-  const peliculaActual = posts.find((post) => post.slug === slug);
-  console.log("Pelicula actual:", peliculaActual);
-
+  const pelicula = posts.find((post) => post.slug === slug);
   const IMG_PATH = process.env.NEXT_PUBLIC_IMG_PATH;
 
   return {
-    title: peliculaActual?.title + " | Cineclub Forever" || "Película",
-    description: peliculaActual?.sinopsis || "Mira esta película en nuestro sitio",
+    title: pelicula?.title ? `${pelicula.title} | Cineclub Forever` : "Película",
+    description: pelicula?.sinopsis || "Mira esta película en nuestro sitio",
     openGraph: {
-      title: peliculaActual?.title,
-      description: peliculaActual?.sinopsis,
+      title: pelicula?.title,
+      description: pelicula?.sinopsis,
       images: [
         {
-          url: IMG_PATH + (peliculaActual?.backdrop || peliculaActual?.poster || ""),
-          width: 600,
-          height: 900,
-          alt: peliculaActual?.title,
+          url: IMG_PATH + (pelicula?.backdrop || pelicula?.poster || ""),
+          width: 1280,
+          height: 720,
+          alt: pelicula?.title,
         },
       ],
     },
@@ -42,110 +38,179 @@ export default async function PeliculaDetalle({ params }) {
   const { slug } = await params;
   const IMG_PATH = process.env.NEXT_PUBLIC_IMG_PATH;
 
-  // Fetch posts
   const moviesData = Subtitles();
-  console.log("moviesData", moviesData);
   const posts = await TMDBApiCall(moviesData);
-  const peliculaActual = posts.find((post) => post.slug === slug);
+  const pelicula = posts.find((post) => post.slug === slug);
 
-
-
-  // Fetch credits
-  const director = peliculaActual?.id
-    ? await getCredits(peliculaActual.id)
-    : null;
-
-
-
+  const director = pelicula?.id ? await getCredits(pelicula.id) : null;
 
   const index = posts.findIndex((post) => post.slug === slug);
   const prevPost = posts[(index - 1 + posts.length) % posts.length];
   const nextPost = posts[(index + 1) % posts.length];
 
   const movieData = getMovieDataBySlug(slug);
+  const year = pelicula?.release_date?.slice(0, 4);
 
   return (
-    <section className="min-h-screen bg-gray-900 text-white py-12 px-4">
-      <div className="max-w-6xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="md:w-1/3">
-            <Image
-              src={IMG_PATH + (peliculaActual?.poster || "")}
-              alt="Poster descriptivo"
-              className="rounded-lg w-full shadow-md"
-              width={300}
-              height={450}
-            />
-          </div>
-          <div className="md:w-2/3 space-y-4">
-            <h1 className="text-4xl font-bold leading-tight">
-              {peliculaActual?.title}
-            </h1>
-            <p>
-              <span className="font-semibold">Director:</span>{" "}
-              {director || "Desconocido"}
-            </p>
-            <p>
-              <span className="font-semibold">Fecha de Lanzamiento:</span>{" "}
-              {peliculaActual?.release_date?.replace(/-/g, "/") || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Género:</span>{" "}
-              {(peliculaActual?.genero || []).join(", ")}
-            </p>
-            {movieData?.propuestaPor && (
-              <p>
-                <span className="font-semibold">Propuesta por:</span>{" "}
-                {movieData.propuestaPor}
-              </p>
-            )}
-            <h5 className="font-bold mb-0">Sinopsis:</h5>
-            <p className="text-gray-300">{peliculaActual?.sinopsis}</p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-[#0d0d0d] text-white">
 
-        <div className="mt-10">
-          <Video
-            url={movieData?.videoSrc}
-            subtitle={movieData?.subtitlePath}
-            key={slug}
+      {/* ── BACKDROP ──────────────────────────────────────────── */}
+      <div className="relative w-full h-[62vh] overflow-hidden">
+        {pelicula?.backdrop && (
+          <Image
+            src={`${BACKDROP_PATH}${pelicula.backdrop}`}
+            alt={pelicula.title}
+            fill
+            priority
+            className="object-cover"
           />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/30 to-[#0d0d0d]/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d0d0d]/70 to-transparent" />
+      </div>
+
+      {/* ── INFO ──────────────────────────────────────────────── */}
+      <div className="max-w-6xl mx-auto px-6 md:px-14">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 -mt-40 relative z-10 mb-14">
+
+          {/* Poster */}
+          <div className="w-40 md:w-52 shrink-0">
+            {pelicula?.poster && (
+              <Image
+                src={`${IMG_PATH}${pelicula.poster}`}
+                alt={pelicula.title}
+                width={300}
+                height={450}
+                className="rounded-sm shadow-[0_30px_80px_rgba(0,0,0,0.8)] w-full"
+              />
+            )}
+          </div>
+
+          {/* Meta */}
+          <div className="flex flex-col gap-4 md:pt-40">
+            {year && (
+              <span
+                className="text-amber-400 text-[10px] font-bold tracking-[0.35em] uppercase"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
+                {year}
+              </span>
+            )}
+
+            <h1
+              className="text-4xl md:text-[3.5rem] font-bold text-white leading-[1.05]"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              {pelicula?.title}
+            </h1>
+
+            {/* Géneros */}
+            {pelicula?.genero?.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {pelicula.genero.map((g) => (
+                  <span
+                    key={g}
+                    className="text-[11px] text-white/55 border border-white/15 px-3 py-1 rounded-full"
+                  >
+                    {g}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Créditos */}
+            <div className="flex flex-wrap gap-x-10 gap-y-2 text-sm text-white/60 mt-1">
+              {director && (
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-white/25 text-[9px] uppercase tracking-[0.25em]">Dirección</span>
+                  <span>{director}</span>
+                </div>
+              )}
+              {pelicula?.propuestaPor && (
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-white/25 text-[9px] uppercase tracking-[0.25em]">Propuesta por</span>
+                  <span>{pelicula.propuestaPor}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Sinopsis */}
+            <p className="text-white/50 text-sm leading-relaxed max-w-xl mt-2">
+              {pelicula?.sinopsis}
+            </p>
+          </div>
         </div>
 
-        <div className="flex justify-between items-center mt-12">
-          <Link
-            href={`/peliculas-detalle/${prevPost.slug}`}
-            className="flex items-center gap-2 text-blue-400 hover:underline"
+        {/* ── VIDEO ─────────────────────────────────────────────── */}
+        <div className="mb-16">
+          <p
+            className="text-white/20 text-[9px] uppercase tracking-[0.3em] mb-3"
+            style={{ fontFamily: "var(--font-montserrat)" }}
           >
-            <GrPrevious /> Anterior
+            Reproducir
+          </p>
+          <div className="w-full aspect-video bg-black rounded-sm overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)]">
+            <Video url={movieData?.videoSrc} subtitle={movieData?.subtitlePath} key={slug} />
+          </div>
+        </div>
+
+        {/* ── PREV / NEXT ───────────────────────────────────────── */}
+        <div className="border-t border-white/[0.07] pt-10 pb-20 grid grid-cols-2 gap-6">
+          <Link href={`/peliculas-detalle/${prevPost.slug}`} className="group flex items-center gap-4">
+            <div className="relative w-12 h-[4.5rem] shrink-0 overflow-hidden rounded-sm opacity-50 group-hover:opacity-90 transition-opacity duration-300">
+              {prevPost.poster && (
+                <Image
+                  src={`${IMG_PATH}${prevPost.poster}`}
+                  alt={prevPost.title}
+                  fill
+                  className="object-cover"
+                />
+              )}
+            </div>
+            <div>
+              <p className="text-white/25 text-[9px] uppercase tracking-[0.3em] mb-1">← Anterior</p>
+              <p
+                className="text-white/55 text-sm font-semibold group-hover:text-white transition-colors line-clamp-2"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
+                {prevPost.title}
+              </p>
+            </div>
           </Link>
-          <Link
-            href={`/peliculas-detalle/${nextPost.slug}`}
-            className="flex items-center gap-2 text-blue-400 hover:underline"
-          >
-            Siguiente <GrNext />
+
+          <Link href={`/peliculas-detalle/${nextPost.slug}`} className="group flex items-center gap-4 justify-end text-right">
+            <div>
+              <p className="text-white/25 text-[9px] uppercase tracking-[0.3em] mb-1">Siguiente →</p>
+              <p
+                className="text-white/55 text-sm font-semibold group-hover:text-white transition-colors line-clamp-2"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
+                {nextPost.title}
+              </p>
+            </div>
+            <div className="relative w-12 h-[4.5rem] shrink-0 overflow-hidden rounded-sm opacity-50 group-hover:opacity-90 transition-opacity duration-300">
+              {nextPost.poster && (
+                <Image
+                  src={`${IMG_PATH}${nextPost.poster}`}
+                  alt={nextPost.title}
+                  fill
+                  className="object-cover"
+                />
+              )}
+            </div>
           </Link>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
-
 export function getMovieDataBySlug(slug) {
   const moviesData = Subtitles();
-
-  // Buscar el objeto que coincida con el slug (campo "name")
   const movie = moviesData.find((item) => item.name === slug);
-
   if (!movie) {
     console.warn("⚠️ No se encontró película con slug:", slug);
     return null;
   }
-
-  console.log("🎬 Película encontrada:", movie);
-  console.log("▶️ Ruta del video:", movie.videoSrc);
-  console.log("📄 Ruta de subtítulos:", movie.subtitlePath);
-
   return movie;
 }
