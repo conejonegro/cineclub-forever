@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "1287141",
+      name: "pasajero",
+      videoSrc: "https://mcseguros.com.mx/cineclub/pasajero.mp4",
+      subtitlePath: "/subtitles/pasajero-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Alma",
+    },
+    {
       tmdb_ID: "1325734",
       name: "el-drama",
       videoSrc: "https://mcseguros.com.mx/cineclub/the-drama.mp4",
