@@ -24,54 +24,92 @@ function ProfilePage() {
 
   if (userData === undefined) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-        <h1 className="text-xl font-semibold text-gray-700">
-          Cargando perfil...
-        </h1>
+      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
+        <p className="text-white/30 text-xs tracking-[0.4em] uppercase">Cargando</p>
       </div>
     );
   }
 
-  if (userData === null) {
-    return null;
-  }
+  if (userData === null) return null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm text-center">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Perfil</h1>
+    <main className="min-h-screen bg-[#0d0d0d]">
+      <div className="max-w-6xl mx-auto px-6 md:px-14 py-14">
 
-        {userData.photoURL ? (
-          <Image
-            src={userData.photoURL}
-            width={96}
-            height={96}
-            alt={`Foto de ${userData.displayName ?? "usuario"}`}
-            className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-          />
-        ) : (
-          <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-gray-200 flex items-center justify-center">
-            <FaUserCircle className="w-12 h-12 text-gray-400" size={48} />
+        {/* Header */}
+        <div className="mb-10">
+          <p
+            className="text-white/50 text-[10px] uppercase tracking-[0.3em] mb-2 font-semibold"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Cuenta
+          </p>
+          <h1
+            className="text-white text-3xl font-bold"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Mi perfil
+          </h1>
+        </div>
+
+        {/* Card */}
+        <div className="max-w-sm bg-white/[0.03] border border-white/[0.06] rounded-xl p-8 flex flex-col items-center gap-6">
+
+          {/* Avatar */}
+          {userData.photoURL ? (
+            <Image
+              src={userData.photoURL}
+              width={80}
+              height={80}
+              alt={`Foto de ${userData.displayName ?? "usuario"}`}
+              className="w-20 h-20 rounded-full object-cover ring-2 ring-white/10"
+            />
+          ) : (
+            <div className="w-20 h-20 rounded-full bg-white/[0.06] flex items-center justify-center ring-2 ring-white/10">
+              <FaUserCircle className="text-white/20" size={40} />
+            </div>
+          )}
+
+          {/* Info */}
+          <div className="w-full flex flex-col divide-y divide-white/[0.06]">
+            <div className="py-3 flex flex-col gap-0.5">
+              <span
+                className="text-white/40 text-[10px] uppercase tracking-[0.2em]"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
+                Nombre
+              </span>
+              <span className="text-white/90 text-sm font-medium">
+                {userData.displayName ?? "Usuario"}
+              </span>
+            </div>
+            <div className="py-3 flex flex-col gap-0.5">
+              <span
+                className="text-white/40 text-[10px] uppercase tracking-[0.2em]"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
+                Correo
+              </span>
+              <span className="text-white/90 text-sm font-medium">
+                {userData.email ?? "Sin correo registrado"}
+              </span>
+            </div>
           </div>
-        )}
 
-        <p className="text-gray-700 font-medium mb-2">
-          <b>Nombre:</b> {userData.displayName ?? "Usuario"}
-        </p>
+          {/* Logout */}
+          <button
+            type="button"
+            onClick={logOutFromCineclub}
+            className="w-full border border-white/10 hover:border-red-400/40 text-white/40 hover:text-red-400 text-sm font-medium py-2.5 rounded-full transition-colors duration-200 cursor-pointer"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Cerrar sesión
+          </button>
 
-        <p className="text-gray-600 mb-4">
-          <b>Email:</b> {userData.email ?? "Sin correo registrado"}
-        </p>
+        </div>
 
-        <button
-          type="button"
-          onClick={logOutFromCineclub}
-          className="w-full bg-red-500 hover:bg-red-600 cursor-pointer text-white font-semibold py-2 px-4 rounded-xl transition duration-200"
-        >
-          Cerrar sesión
-        </button>
       </div>
-    </div>
+    </main>
   );
 }
 

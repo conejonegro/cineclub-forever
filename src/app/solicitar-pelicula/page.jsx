@@ -8,7 +8,7 @@ export default function SolicitarPeliculaPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [movieTitle, setMovieTitle] = useState("");
-  const [status, setStatus] = useState(null); // "success" | "error" | null
+  const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -48,85 +48,139 @@ export default function SolicitarPeliculaPage() {
   }
 
   return (
-    <main className="max-w-xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-2 text-center">Solicitar película</h1>
-      <p className="text-gray-500 text-center mb-8">
-        Propón una película para la próxima sesión del cineclub.
-      </p>
+    <main className="min-h-screen bg-[#0d0d0d]">
+      <div className="max-w-6xl mx-auto px-6 md:px-14 py-14">
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 flex flex-col gap-5">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sm font-medium text-gray-700">
-            Nombre
-          </label>
-          <input
-            id="name"
-            type="text"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            placeholder="Tu nombre"
-          />
+        {/* Header */}
+        <div className="mb-10">
+          <p
+            className="text-white/50 text-[10px] uppercase tracking-[0.3em] mb-2 font-semibold"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Comunidad
+          </p>
+          <h1
+            className="text-white text-3xl font-bold"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Solicitar película
+          </h1>
+          <p className="text-white/40 text-sm mt-2">
+            Propón una película para la próxima sesión del cineclub.
+          </p>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="text-sm font-medium text-gray-700">
-            Correo electrónico
-          </label>
-          <input
-            id="email"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            placeholder="tu@correo.com"
-          />
-          {status === "invalid_email" && (
-            <p className="text-red-500 text-xs mt-1">Ingresa un correo electrónico válido.</p>
+        {/* Form */}
+        <div className="max-w-md">
+          {status === "success" ? (
+            <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl px-8 py-12 flex flex-col items-center gap-4 text-center">
+              <span className="text-amber-400 text-3xl">✓</span>
+              <p
+                className="text-white/90 text-base font-semibold"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
+                Solicitud enviada
+              </p>
+              <p className="text-white/40 text-sm">
+                Tu propuesta fue registrada. La revisaremos para la próxima sesión.
+              </p>
+              <button
+                onClick={() => setStatus(null)}
+                className="mt-2 text-amber-400 hover:text-amber-300 text-sm transition-colors duration-200"
+              >
+                Enviar otra solicitud
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+
+              <div className="flex flex-col gap-1.5">
+                <label
+                  htmlFor="name"
+                  className="text-white/50 text-[10px] uppercase tracking-[0.2em] font-semibold"
+                  style={{ fontFamily: "var(--font-montserrat)" }}
+                >
+                  Nombre
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Tu nombre"
+                  className="bg-white/[0.04] border border-white/[0.08] rounded-md px-4 py-3 text-sm text-white/90 placeholder-white/20 focus:outline-none focus:border-amber-400/50 focus:bg-white/[0.06] transition-colors duration-200"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label
+                  htmlFor="email"
+                  className="text-white/50 text-[10px] uppercase tracking-[0.2em] font-semibold"
+                  style={{ fontFamily: "var(--font-montserrat)" }}
+                >
+                  Correo electrónico
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="tu@correo.com"
+                  className="bg-white/[0.04] border border-white/[0.08] rounded-md px-4 py-3 text-sm text-white/90 placeholder-white/20 focus:outline-none focus:border-amber-400/50 focus:bg-white/[0.06] transition-colors duration-200"
+                />
+                {status === "invalid_email" && (
+                  <p className="text-red-400/80 text-xs mt-0.5">
+                    Ingresa un correo electrónico válido.
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label
+                  htmlFor="movie_title"
+                  className="text-white/50 text-[10px] uppercase tracking-[0.2em] font-semibold"
+                  style={{ fontFamily: "var(--font-montserrat)" }}
+                >
+                  Película que propones
+                </label>
+                <input
+                  id="movie_title"
+                  type="text"
+                  required
+                  value={movieTitle}
+                  onChange={(e) => setMovieTitle(e.target.value)}
+                  placeholder="Título de la película"
+                  className="bg-white/[0.04] border border-white/[0.08] rounded-md px-4 py-3 text-sm text-white/90 placeholder-white/20 focus:outline-none focus:border-amber-400/50 focus:bg-white/[0.06] transition-colors duration-200"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-amber-400 hover:bg-amber-300 disabled:opacity-40 text-black text-sm font-bold py-3 rounded-full transition-colors duration-200"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
+                {loading ? "Enviando..." : "Enviar solicitud"}
+              </button>
+
+              {status === "error" && (
+                <p className="text-red-400/80 text-sm text-center">
+                  Ocurrió un error. Intenta de nuevo.
+                </p>
+              )}
+              {status === "limit_reached" && (
+                <p className="text-amber-400/70 text-sm text-center">
+                  Ya alcanzaste el límite de 5 solicitudes con este correo.
+                </p>
+              )}
+
+            </form>
           )}
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="movie_title" className="text-sm font-medium text-gray-700">
-            Película que propones
-          </label>
-          <input
-            id="movie_title"
-            type="text"
-            required
-            value={movieTitle}
-            onChange={(e) => setMovieTitle(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            placeholder="Título de la película"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-gray-900 text-white text-sm font-medium py-2 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50"
-        >
-          {loading ? "Enviando..." : "Enviar solicitud"}
-        </button>
-
-        {status === "success" && (
-          <p className="text-green-600 text-sm text-center font-medium">
-            Tu solicitud fue enviada.
-          </p>
-        )}
-        {status === "error" && (
-          <p className="text-red-500 text-sm text-center font-medium">
-            Ocurrió un error. Intenta de nuevo.
-          </p>
-        )}
-        {status === "limit_reached" && (
-          <p className="text-orange-500 text-sm text-center font-medium">
-            Ya alcanzaste el límite de 5 solicitudes con este correo.
-          </p>
-        )}
-      </form>
+      </div>
     </main>
   );
 }

@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/components/FirebaseSettings";
 import { UserContext } from "@/components/UserProvider";
+import Link from "next/link";
 
 export default function PeliculasSolicitadasPage() {
   const [grouped, setGrouped] = useState(null);
@@ -64,7 +65,7 @@ export default function PeliculasSolicitadasPage() {
       return acc;
     }, {});
 
-    const sorted = Object.values(counts).sort((movieA, movieB) => movieB.count - movieA.count);
+    const sorted = Object.values(counts).sort((a, b) => b.count - a.count);
 
     const tmdbResults = await Promise.all(
       sorted.map(async ({ display }) => {
@@ -80,9 +81,9 @@ export default function PeliculasSolicitadasPage() {
       })
     );
 
-    const enriched = sorted.map((item, movieIndex) => ({
+    const enriched = sorted.map((item, i) => ({
       ...item,
-      tmdb: tmdbResults[movieIndex],
+      tmdb: tmdbResults[i],
       voteCount: voteCountsByKey[item.display.trim().toLowerCase()] ?? 0,
     }));
     setGrouped(enriched);
@@ -90,7 +91,7 @@ export default function PeliculasSolicitadasPage() {
 
   useEffect(() => {
     fetchRequests();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleDelete(ids, key) {
@@ -120,98 +121,152 @@ export default function PeliculasSolicitadasPage() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-2 text-center">Películas solicitadas</h1>
-      <p className={`text-gray-500 text-center ${!user ? "mb-2" : "mb-8"}`}>
-        Las películas que el cineclub ha propuesto hasta ahora.
-      </p>
-      {!user && (
-        <p className="text-center text-sm text-gray-400 mb-8">
-          Para solicitar una película y votar{" "}
-          <a href="/login" className="text-blue-400 hover:underline">
-            inicia sesión
-          </a>
-          .
-        </p>
-      )}
+    <main className="min-h-screen bg-[#0d0d0d]">
+      <div className="max-w-6xl mx-auto px-6 md:px-14 py-14">
 
-      {grouped === null ? null : grouped.length === 0 ? (
-        <p className="text-gray-500 text-center">
-          Aún no hay solicitudes. ¡Sé el primero en pedir una película!
-        </p>
-      ) : (
-        <ul className="bg-white rounded-lg shadow-md divide-y divide-gray-100">
-          {grouped.map(({ display, count, ids, requesters, tmdb, voteCount }) => {
-            const movieKey = display.trim().toLowerCase();
-            const alreadyVoted = votedMovieKeys.has(movieKey);
-            return (
-              <li key={movieKey} className="flex items-center gap-4 px-6 py-4">
-                {tmdb?.poster_path ? (
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_IMG_PATH}${tmdb.poster_path}`}
-                    alt={tmdb.title}
-                    className="w-12 rounded object-cover shrink-0"
-                    style={{ height: "72px" }}
-                  />
-                ) : (
-                  <div className="w-12 shrink-0 rounded bg-gray-200" style={{ height: "72px" }} />
-                )}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {tmdb?.title ?? display}
-                  </p>
-                  {tmdb && (
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      ★ {tmdb.vote_average.toFixed(1)}
+        {/* Header */}
+        <div className="mb-10">
+          <p
+            className="text-white/50 text-[10px] uppercase tracking-[0.3em] mb-2 font-semibold"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Comunidad
+          </p>
+          <h1
+            className="text-white text-3xl font-bold"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Películas solicitadas
+          </h1>
+          <p className="text-white/40 text-sm mt-2">
+            Las películas que el cineclub ha propuesto hasta ahora.
+          </p>
+          {!user && (
+            <p className="text-white/40 text-sm mt-1">
+              Para solicitar una película y votar{" "}
+              <Link
+                href="/login"
+                className="text-amber-400 hover:text-amber-300 transition-colors duration-200"
+              >
+                inicia sesión
+              </Link>
+              .
+            </p>
+          )}
+        </div>
+
+        {/* Section divider */}
+        <div className="flex items-center gap-4 mb-8">
+          <span
+            className="text-white/35 text-[10px] font-semibold tracking-[0.35em] uppercase"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Solicitudes
+          </span>
+          <div className="h-px flex-1 bg-white/10" />
+          {grouped && (
+            <span className="text-white/20 text-[10px] tracking-widest">
+              {grouped.length} {grouped.length === 1 ? "película" : "películas"}
+            </span>
+          )}
+        </div>
+
+        {/* Loading skeleton */}
+        {grouped === null && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="animate-pulse flex flex-col gap-2">
+                <div className="w-full aspect-[2/3] rounded-sm bg-white/[0.04]" />
+                <div className="h-3 bg-white/[0.04] rounded w-3/4" />
+                <div className="h-2.5 bg-white/[0.03] rounded w-1/2" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Empty state */}
+        {grouped?.length === 0 && (
+          <p className="text-white/30 text-sm text-center py-20">
+            Aún no hay solicitudes. ¡Sé el primero en pedir una película!
+          </p>
+        )}
+
+        {/* Grid */}
+        {grouped?.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+            {grouped.map(({ display, ids, requesters, tmdb, voteCount }, index) => {
+              const movieKey = display.trim().toLowerCase();
+              const alreadyVoted = votedMovieKeys.has(movieKey);
+              return (
+                <div key={movieKey} className="flex flex-col gap-2">
+
+                  {/* Poster */}
+                  <div className="relative w-full aspect-[2/3] rounded-sm overflow-hidden bg-white/[0.04] border border-white/[0.08]">
+                    {tmdb?.poster_path && (
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_IMG_PATH}${tmdb.poster_path}`}
+                        alt={tmdb?.title ?? display}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    {/* Rank badge */}
+                    <span className="absolute top-2 left-2 text-[10px] font-bold text-white/60 bg-black/50 px-1.5 py-0.5 rounded font-mono">
+                      {index + 1}
+                    </span>
+                    {/* Admin delete */}
+                    {isAdmin && (
+                      <button
+                        onClick={() => handleDelete(ids, movieKey)}
+                        className="absolute top-2 right-2 text-[10px] text-white/40 hover:text-red-400 bg-black/50 px-1.5 py-0.5 rounded transition-colors duration-200"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex flex-col gap-1 px-0.5">
+                    <p
+                      className="text-white/90 text-xs font-semibold leading-snug line-clamp-2"
+                      style={{ fontFamily: "var(--font-montserrat)" }}
+                    >
+                      {tmdb?.title ?? display}
                     </p>
-                  )}
-                  <p className="text-sm text-gray-400 mt-1">
-                    {voteCount} {voteCount === 1 ? "voto" : "votos"}
-                  </p>
-                  {requesters.length > 0 && (
-                    <div className="mt-1">
-                      <p className="text-xs text-gray-400">Solicitada por</p>
-                      <ul className="space-y-0.5">
-                        {requesters.map((requester, requesterIndex) => (
-                          <li key={requesterIndex} className="text-xs text-gray-400">
-                            {requester.name && requester.email
-                              ? `${requester.name} — ${requester.email}`
-                              : requester.name ?? requester.email}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                    {requesters.length > 0 && (
+                      <p className="text-white/30 text-[10px] truncate">
+                        {requesters.map((r) => r.name ?? r.email).join(", ")}
+                      </p>
+                    )}
+
+                    {/* Vote */}
+                    {user ? (
+                      <button
+                        onClick={() => !alreadyVoted && handleVote(movieKey)}
+                        disabled={alreadyVoted}
+                        className={`mt-0.5 flex items-center gap-1 text-xs font-bold transition-colors duration-200 w-fit ${
+                          alreadyVoted
+                            ? "text-amber-400/50 cursor-default"
+                            : "text-amber-400 hover:text-amber-300 cursor-pointer"
+                        }`}
+                        style={{ fontFamily: "var(--font-montserrat)" }}
+                      >
+                        <span>{alreadyVoted ? "✓" : "↑"}</span>
+                        <span>{voteCount} {voteCount === 1 ? "voto" : "votos"}</span>
+                      </button>
+                    ) : (
+                      <span className="text-white/25 text-[10px] tabular-nums mt-0.5">
+                        {voteCount} {voteCount === 1 ? "voto" : "votos"}
+                      </span>
+                    )}
+                  </div>
+
                 </div>
-                <div className="flex flex-col items-end gap-1 shrink-0">
-                  {isAdmin && (
-                    <button
-                      onClick={() => handleDelete(ids, movieKey)}
-                      className="text-red-400 hover:text-red-600 text-xs"
-                      title="Borrar película"
-                    >
-                      Borrar
-                    </button>
-                  )}
-                  {user && (
-                    <button
-                      onClick={() => !alreadyVoted && handleVote(movieKey)}
-                      disabled={alreadyVoted}
-                      className={
-                        alreadyVoted
-                          ? "text-xs text-gray-400 cursor-default"
-                          : "text-xs text-blue-500 hover:text-blue-700"
-                      }
-                    >
-                      {alreadyVoted ? "Votado ✓" : "Votar"}
-                    </button>
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+              );
+            })}
+          </div>
+        )}
+
+      </div>
     </main>
   );
 }
