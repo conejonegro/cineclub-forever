@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "1242011",
+      name: "together",
+      videoSrc: "https://mcseguros.com.mx/cineclub/together.mp4",
+      subtitlePath: "/subtitles/together-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Luis",
+    },
+    {
       tmdb_ID: "1287141",
       name: "pillion",
       videoSrc: "https://mcseguros.com.mx/cineclub/pasajero.mp4",
