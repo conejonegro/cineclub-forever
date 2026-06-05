@@ -3,7 +3,8 @@ export const Subtitles = () => {
     {
       tmdb_ID: "1242011",
       name: "together",
-      videoSrc: "https://mcseguros.com.mx/cineclub/together.mp4",
+      videoSrc:
+        "https://mcseguros.com.mx/cineclub/together-juntos-hasta-la-muerte.mp4",
       subtitlePath: "/subtitles/together-subs-esp.vtt",
       ciclo: "Libre",
       propuestaPor: "Luis",
