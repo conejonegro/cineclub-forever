@@ -18,14 +18,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: review.titulo,
       description: review.descripcion,
-      images: [
-        {
-          url: review.imagenUrl,
-           width: 600,
-          height: 900,
-          alt: review.titulo,
-        },
-      ],
+      images: [{ url: review.imagenUrl, width: 600, height: 900, alt: review.titulo }],
     },
     twitter: {
       card: "summary_large_image",
@@ -42,17 +35,17 @@ export default async function ReviewPage({ params }) {
 
   if (!review) {
     return (
-      <main className="max-w-3xl mx-auto px-4 py-10">
-        <p className="text-gray-600">No encontramos esa reseña.</p>
+      <main className="min-h-screen bg-[#0d0d0d] text-white">
+        <div className="max-w-3xl mx-auto px-6 py-16">
+          <p className="text-white/40">No encontramos esa reseña.</p>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-10">
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <ReviewContent review={review} />
-      </div>
+    <main className="min-h-screen bg-[#0d0d0d] text-white">
+      <ReviewContent review={review} />
     </main>
   );
 }

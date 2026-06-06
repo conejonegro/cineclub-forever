@@ -3,6 +3,7 @@ export const revalidate = 3600;
 import Image from "next/image";
 import Link from "next/link";
 import Video from "@/components/Video";
+import Comments from "@/components/Comments";
 import { Subtitles } from "@/lib/subtitles";
 import TMDBApiCall from "@/lib/TMBDApiCall";
 import getCredits from "@/lib/TMDB_credits_call";
@@ -153,6 +154,9 @@ export default async function PeliculaDetalle({ params }) {
             <Video url={movieData?.videoSrc} subtitle={movieData?.subtitlePath} key={slug} />
           </div>
         </div>
+
+        {/* ── COMMENTS ──────────────────────────────────────────── */}
+        <Comments movieSlug={slug} />
 
         {/* ── PREV / NEXT ───────────────────────────────────────── */}
         <div className="border-t border-white/[0.07] pt-10 pb-20 grid grid-cols-2 gap-6">
