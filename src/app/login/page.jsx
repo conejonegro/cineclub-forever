@@ -1,163 +1,87 @@
 "use client";
 
+import { useEffect, useContext, useState } from "react";
 import { auth } from "@/components/FirebaseSettings";
-import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { useState, useContext } from "react";
-import { toast, Toaster } from "react-hot-toast";
 import { UserContext } from "@/components/UserProvider";
-import Image from "next/image";
 
 const provider = new GoogleAuthProvider();
 
-function Login() {
+export default function Login() {
   const router = useRouter();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [email, setInputEmail] = useState("");
-  const [password, setInputPassword] = useState("");
+  // Redirige si ya hay sesión activa
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
 
-  function handleValueEmail(e) {
-    setInputEmail(e.target.value);
-  }
-
-  function handleValuePassword(e) {
-    setInputPassword(e.target.value);
-  }
-
-  const googleLogin = async () => {
+  const handleGoogleLogin = async () => {
+    setError(null);
+    setLoading(true);
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      //localStorage.setItem("userData", JSON.stringify(user));
-      setUser(user);
-      toast.success("¡Inicio de sesión exitoso con Google! 🎉");
+      await signInWithPopup(auth, provider);
       router.push("/");
-    } catch (error) {
-      console.error(error.message);
-      toast.error("Error al iniciar sesión con Google.");
-    }
-  };
-
-  const userPasswordLogin = async () => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      localStorage.setItem("userData", JSON.stringify(user));
-      setUser(user);
-      toast.success("¡Inicio de sesión exitoso! 🎉");
-      router.push("/");
-    } catch (error) {
-      const notifyError = (message) => {
-        toast.error(message, { duration: 4000 });
-      };
-
-      if (error.code === "auth/invalid-email" || error.code === "auth/invalid-login-credentials") {
-        notifyError("Email o contraseña incorrectos.");
-      } else {
-        notifyError("Error al iniciar sesión.");
-      }
+    } catch (err) {
+      console.error("[login] popup error:", err.code, err.message);
+      setError("Hubo un error al iniciar sesión. Intenta de nuevo.");
+      setLoading(false);
     }
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <div className="flex justify-center mb-6">
-          <Image
-            src="/cineclub-logo.png"
-            alt="Cineclub logo"
-            className="w-32 h-auto"
-            width={128}
-            height={128}
-          />
+    <main className="min-h-screen bg-[#0d0d0d] flex items-center justify-center px-6">
+      <div className="w-full max-w-sm flex flex-col items-center gap-8">
+
+        {/* Logo / título */}
+        <div className="flex flex-col items-center gap-2 text-center">
+          <p
+            className="text-white/50 text-[10px] uppercase tracking-[0.3em] font-semibold"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Cineclub
+          </p>
+          <h1
+            className="text-white text-2xl font-bold"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Iniciar sesión
+          </h1>
+          <p className="text-white/30 text-sm">
+            Accede para solicitar películas, votar y más.
+          </p>
         </div>
 
-        <h2 className="text-2xl font-bold text-center mb-6 text-black">Iniciar Sesión</h2>
+        {/* Botón Google */}
+        <button
+          onClick={handleGoogleLogin}
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-3 bg-white/[0.05] hover:bg-white/[0.09] disabled:opacity-40 border border-white/[0.08] hover:border-white/[0.14] text-white/80 text-sm font-semibold py-3 px-5 rounded-full transition-colors duration-200"
+          style={{ fontFamily: "var(--font-montserrat)" }}
+        >
+          <GoogleIcon />
+          {loading ? "Cargando..." : "Continuar con Google"}
+        </button>
 
-        <div className="flex flex-col gap-4 mb-6">
-          {/* Botón de Google */}
-          <button
-            onClick={googleLogin}
-            className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl transition duration-200"
-          >
-            <i className="fab fa-google"></i> Iniciar sesión con Google
-          </button>
+        {error && (
+          <p className="text-red-400/80 text-xs text-center">{error}</p>
+        )}
 
-          {/* Divider */}
-          <div className="flex items-center gap-2">
-            <hr className="flex-grow border-gray-300" />
-            <span className="text-gray-400">o</span>
-            <hr className="flex-grow border-gray-300" />
-          </div>
-
-          {/* Inputs Email y Password 
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-gray-600 text-sm mb-1">
-                Correo electrónico
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={handleValueEmail}
-                className="w-full border border-gray-300 rounded-xl py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
-                placeholder="Ingresa tu correo"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-gray-600 text-sm mb-1">
-                Contraseña
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={handleValuePassword}
-                className="w-full border border-gray-300 rounded-xl py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
-                placeholder="Ingresa tu contraseña"
-              />
-            </div>
-          </div> */}
-
-          {/* Botón de login con correo y contraseña 
-          <button
-            onClick={userPasswordLogin}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-xl transition duration-200 mt-4"
-          >
-            Iniciar sesión con correo
-          </button> */}
-        </div>
-
-        {/* Recordarme y Olvidaste contraseña 
-        <div className="flex justify-between items-center mt-4">
-          <div className="flex items-center gap-2">
-            <input type="checkbox" id="remember" className="accent-primary-500" />
-            <label htmlFor="remember" className="text-sm text-gray-600">
-              Recuérdame
-            </label>
-          </div>
-          <a href="#!" className="text-sm text-primary-500 hover:underline">
-            ¿Olvidaste tu contraseña?
-          </a>
-        </div> */}
-
-        {/* Registro 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          ¿No tienes cuenta?{" "}
-          <Link href="/registro" className="text-primary-500 font-bold hover:underline">
-            Regístrate
-          </Link>
-        </p>*/}
-
-        {/* Toasts */}
-        <Toaster />
       </div>
-    </section>
+    </main>
   );
 }
 
-export default Login;
+function GoogleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"/>
+      <path d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5614C11.2418 14.1014 10.2109 14.4205 9 14.4205C6.65591 14.4205 4.67182 12.8373 3.96409 10.71H0.957275V13.0418C2.43818 15.9832 5.48182 18 9 18Z" fill="#34A853"/>
+      <path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957275C0.347727 6.17318 0 7.54773 0 9C0 10.4523 0.347727 11.8268 0.957275 13.0418L3.96409 10.71Z" fill="#FBBC05"/>
+      <path d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"/>
+    </svg>
+  );
+}
