@@ -1,6 +1,22 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "883083",
+      name: "no-estaras-sola",
+      videoSrc: "https://mcseguros.com.mx/cineclub/you-wont-be-alone.mp4",
+      subtitlePath: "/subtitles/no-estaras-sola-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Luis",
+    },
+    {
+      tmdb_ID: "524635",
+      name: "the-chronology-of-water",
+      videoSrc: "https://mcseguros.com.mx/cineclub/cronologia-del-agua.mp4",
+      subtitlePath: "/subtitles/cronologia-del-agua-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Luis",
+    },
+    {
       tmdb_ID: "1242011",
       name: "together-juntos-hasta-la-muerte",
       videoSrc: "https://mcseguros.com.mx/cineclub/together.mp4",

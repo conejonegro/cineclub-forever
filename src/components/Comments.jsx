@@ -63,9 +63,9 @@ export default function Comments({ movieSlug }) {
   }
 
   return (
-    <section className="mt-10 mb-16">
+    <section className="mt-10 mb-16 max-w-[50%]">
       <h2
-        className="text-white/20 text-[9px] uppercase tracking-[0.3em] mb-6"
+        className="text-white/60 text-[9px] uppercase tracking-[0.3em] mb-6"
         style={{ fontFamily: "var(--font-montserrat)" }}
       >
         Comentarios
