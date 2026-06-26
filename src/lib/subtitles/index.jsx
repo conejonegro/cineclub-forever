@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "21484",
+      name: "posesion",
+      videoSrc: "https://mcseguros.com.mx/cineclub/possession.mp4",
+      subtitlePath: "/subtitles/possession-subs-esp.vtt",
+      ciclo: "Libre",
+      propuestaPor: "Luis",
+    },
+    {
       tmdb_ID: "883083",
       name: "no-estaras-sola",
       videoSrc: "https://mcseguros.com.mx/cineclub/you-wont-be-alone.mp4",
@@ -87,14 +95,6 @@ export const Subtitles = () => {
       subtitlePath: "/subtitles/the-wild-boys-esp.vtt",
       ciclo: "Teens",
       propuestaPor: "Mingo Morales",
-    },
-    {
-      tmdb_ID: "21484",
-      name: "posesion",
-      videoSrc: "https://mcseguros.com.mx/cineclub/possession.mp4",
-      subtitlePath: "/subtitles/possession-subs-esp.vtt",
-      ciclo: "Libre",
-      propuestaPor: "Luis",
     },
   ];
 
