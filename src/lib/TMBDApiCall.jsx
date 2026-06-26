@@ -41,14 +41,14 @@ export default function TMDBApiCall(dataArray) {
 
       // Formateamos la data para quedarnos solo con los campos necesarios
       const postDataFormated = postData?.map((post) => ({
-        title: post.title, // Título original de la película
-        slug: slugify(post.title), // Slug generado a partir del título
-        id: post.id, // ID de TMDB
-        poster: post.poster_path, // Imagen del póster
-        sinopsis: post.overview, // Sinopsis de la película
-        release_date: post.release_date, // Fecha de estreno
-        genero: post.genres.map((g) => g.name), // Géneros de la película
-        backdrop: post.backdrop_path, // Imagen de fondo
+        title: post.title,
+        slug: slugify(post.title),
+        id: post.id,
+        poster: localMap.get(String(post.id))?.customPoster ?? post.poster_path,
+        sinopsis: post.overview,
+        release_date: post.release_date,
+        genero: post.genres.map((g) => g.name),
+        backdrop: post.backdrop_path,
         propuestaPor: localMap.get(String(post.id))?.propuestaPor ?? "",
       }));
 

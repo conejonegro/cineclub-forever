@@ -7,6 +7,7 @@ export const Subtitles = () => {
       subtitlePath: "/subtitles/possession-subs-esp.vtt",
       ciclo: "Libre",
       propuestaPor: "Luis",
+      customPoster: "/lUFZsUuJ0YyhBXH8D2BFUd6wODm.jpg",
     },
     {
       tmdb_ID: "883083",
