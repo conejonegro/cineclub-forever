@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "4723",
+      name: "las-horas-perdidas",
+      videoSrc: "https://mcseguros.com.mx/cineclub/las-horas-perdidas.mp4",
+      subtitlePath: "/subtitles/las-horas-perdidas-subs-esp.vtt",
+      ciclo: "Snob",
+      propuestaPor: "Wally",
+    },
+    {
       tmdb_ID: "21484",
       name: "posesion",
       videoSrc: "https://mcseguros.com.mx/cineclub/possession.mp4",
