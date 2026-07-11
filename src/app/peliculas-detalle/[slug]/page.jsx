@@ -133,6 +133,12 @@ export default async function PeliculaDetalle({ params }) {
                   <span>{pelicula.propuestaPor}</span>
                 </div>
               )}
+              {pelicula?.ciclo && (
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-white/25 text-[9px] uppercase tracking-[0.25em]">Ciclo</span>
+                  <span>{pelicula.ciclo}</span>
+                </div>
+              )}
             </div>
 
             {/* Sinopsis */}
@@ -161,7 +167,7 @@ export default async function PeliculaDetalle({ params }) {
         {/* ── PREV / NEXT ───────────────────────────────────────── */}
         <div className="border-t border-white/[0.07] pt-10 pb-20 grid grid-cols-2 gap-6">
           <Link href={`/peliculas-detalle/${prevPost.slug}`} className="group flex items-center gap-4">
-            <div className="relative w-12 h-[4.5rem] shrink-0 overflow-hidden rounded-sm opacity-50 group-hover:opacity-90 transition-opacity duration-300">
+            <div className="relative w-12 h-[4.5rem] shrink-0 overflow-hidden rounded-sm">
               {prevPost.poster && (
                 <Image
                   src={`${IMG_PATH}${prevPost.poster}`}
@@ -174,7 +180,7 @@ export default async function PeliculaDetalle({ params }) {
             <div>
               <p className="text-white/25 text-[9px] uppercase tracking-[0.3em] mb-1">← Anterior</p>
               <p
-                className="text-white/55 text-sm font-semibold group-hover:text-white transition-colors line-clamp-2"
+                className="text-white text-sm font-semibold line-clamp-2"
                 style={{ fontFamily: "var(--font-montserrat)" }}
               >
                 {prevPost.title}
@@ -186,13 +192,13 @@ export default async function PeliculaDetalle({ params }) {
             <div>
               <p className="text-white/25 text-[9px] uppercase tracking-[0.3em] mb-1">Siguiente →</p>
               <p
-                className="text-white/55 text-sm font-semibold group-hover:text-white transition-colors line-clamp-2"
+                className="text-white text-sm font-semibold line-clamp-2"
                 style={{ fontFamily: "var(--font-montserrat)" }}
               >
                 {nextPost.title}
               </p>
             </div>
-            <div className="relative w-12 h-[4.5rem] shrink-0 overflow-hidden rounded-sm opacity-50 group-hover:opacity-90 transition-opacity duration-300">
+            <div className="relative w-12 h-[4.5rem] shrink-0 overflow-hidden rounded-sm">
               {nextPost.poster && (
                 <Image
                   src={`${IMG_PATH}${nextPost.poster}`}

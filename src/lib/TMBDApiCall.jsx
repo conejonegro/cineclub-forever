@@ -50,6 +50,7 @@ export default function TMDBApiCall(dataArray) {
         genero: post.genres.map((g) => g.name),
         backdrop: post.backdrop_path,
         propuestaPor: localMap.get(String(post.id))?.propuestaPor ?? "",
+        ciclo: localMap.get(String(post.id))?.ciclo ?? "",
       }));
 
       // Retornamos la data formateada

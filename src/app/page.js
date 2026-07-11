@@ -100,6 +100,66 @@ export default function HomePage() {
         </Link>
       )}
 
+      {/* ── CICLO ACTUAL ──────────────────────────────────────── */}
+      <div className="px-6 md:px-14 pt-14">
+        <div className="bg-white/[0.03] border border-white/[0.07] rounded-2xl p-8 md:p-10">
+          <div className="flex items-center gap-4 mb-6">
+            <span
+              className="text-amber-400 text-[10px] font-bold tracking-[0.35em] uppercase"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              Ciclo actual
+            </span>
+            <div className="h-px flex-1 bg-white/10" />
+            <span className="inline-flex items-center gap-2 text-white/35 text-[10px] tracking-[0.15em] uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,0.15)]" />
+              En curso
+            </span>
+          </div>
+
+          <h2
+            className="text-4xl md:text-5xl font-bold text-white leading-[1.05] mb-4"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            Ciclo Snob
+          </h2>
+
+          <p className="text-white/65 text-[15px] leading-relaxed max-w-2xl mb-7">
+            Estamos en el <span className="text-white/85 font-semibold">Ciclo Snob</span>: un grupo
+            de gente de Chihuahua con más cultura que humildad se reúne a recomendarse películas
+            entre sí. No hay reglas de género ni década: puede ser una dosmilera under o una obra
+            maestra que quieran presumir haber visto. Cada quien trae lo suyo y el resto decide qué
+            tanto trae.
+          </p>
+
+          <p className="text-white/30 text-[10px] font-semibold tracking-[0.25em] uppercase mb-3">
+            Quién propone en este ciclo
+          </p>
+          <div className="flex flex-wrap gap-2 mb-8">
+            {["Jonathan", "Diego", "Walter", "Payo", "Alfred", "Luis"].map((name) => (
+              <span
+                key={name}
+                className="text-xs text-white/70 border border-white/15 px-3.5 py-1.5 rounded-full"
+              >
+                {name}
+              </span>
+            ))}
+            <span className="text-xs text-amber-400 border border-amber-400/30 px-3.5 py-1.5 rounded-full">
+              + el que se quiera sumar
+            </span>
+          </div>
+
+          <div className="flex items-center gap-5 flex-wrap">
+            <Link
+              href="/solicitar-pelicula"
+              className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-black text-sm font-bold px-7 py-3 rounded-full transition-colors"
+            >
+              Proponer una película →
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* ── GRID ──────────────────────────────────────────────── */}
       <div className="px-6 md:px-14 py-14">
         <div className="flex items-center gap-4 mb-8">
@@ -134,6 +194,16 @@ export default function HomePage() {
                   </p>
                   {movie.genero?.[0] && (
                     <p className="text-white/45 text-[11px]">{movie.genero[0]}</p>
+                  )}
+                  {movie.propuestaPor && (
+                    <p className="text-white/55 text-[11px] mt-1">
+                      Propuesta por {movie.propuestaPor}
+                    </p>
+                  )}
+                  {movie.ciclo && (
+                    <span className="inline-block w-fit mt-1.5 text-[10px] text-amber-400/90 border border-amber-400/25 px-3 py-1 rounded-full">
+                      Ciclo {movie.ciclo}
+                    </span>
                   )}
                 </div>
               </div>

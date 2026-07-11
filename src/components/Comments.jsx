@@ -63,7 +63,7 @@ export default function Comments({ movieSlug }) {
   }
 
   return (
-    <section className="mt-10 mb-16 max-w-[50%]">
+    <section className="mt-10 mb-16 w-full md:max-w-[50%]">
       <h2
         className="text-white/60 text-[9px] uppercase tracking-[0.3em] mb-6"
         style={{ fontFamily: "var(--font-montserrat)" }}
@@ -74,7 +74,7 @@ export default function Comments({ movieSlug }) {
       {user && (
         <form onSubmit={handleSubmit} className="mb-8">
           <h2
-            className="text-white/50 text-sm font-semibold mb-3"
+            className="text-white text-sm font-semibold mb-3"
             style={{ fontFamily: "var(--font-montserrat)" }}
           >
             Deja un comentario

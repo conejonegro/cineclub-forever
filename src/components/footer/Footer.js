@@ -71,10 +71,10 @@ export default function Footer() {
             <ul className="flex flex-col gap-2">
               <li>
                 <a
-                  href="mailto:trlvdsgn@gmail.com"
+                  href="mailto:luisrosalesochoa@proton.me"
                   className="text-white/70 hover:text-amber-400 text-sm transition-colors duration-200"
                 >
-                  trlvdsgn@gmail.com
+                  luisrosalesochoa@proton.me
                 </a>
               </li>
               <li>
@@ -97,8 +97,8 @@ export default function Footer() {
           <p className="text-white/60 text-xs">
             © {new Date().getFullYear()} Cineclub Forever. Todos los derechos reservados.
           </p>
-          <p className="text-white/15 text-[11px]">
-            Guadalajara, Jalisco, México
+          <p className="text-white/60 text-[11px]">
+            Guadalajara, Jalisco, México — hecho con amor por True Love Web Dev & True Love design
           </p>
         </div>
 
