@@ -65,7 +65,7 @@ export default function Comments({ movieSlug }) {
   return (
     <section className="mt-10 mb-16 w-full md:max-w-[50%]">
       <h2
-        className="text-white/60 text-[9px] uppercase tracking-[0.3em] mb-6"
+        className="text-white/60 text-[9px] md:text-xs uppercase tracking-[0.3em] mb-6"
         style={{ fontFamily: "var(--font-montserrat)" }}
       >
         Comentarios
@@ -74,7 +74,7 @@ export default function Comments({ movieSlug }) {
       {user && (
         <form onSubmit={handleSubmit} className="mb-8">
           <h2
-            className="text-white text-sm font-semibold mb-3"
+            className="text-white text-sm md:text-base font-semibold mb-3"
             style={{ fontFamily: "var(--font-montserrat)" }}
           >
             Deja un comentario
@@ -84,16 +84,16 @@ export default function Comments({ movieSlug }) {
             onChange={(e) => setContent(e.target.value.slice(0, MAX_CHARS))}
             placeholder="Escribe tu comentario…"
             rows={3}
-            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm resize-none placeholder:text-white/30 focus:outline-none focus:border-amber-400 transition-colors"
+            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm md:text-base resize-none placeholder:text-white/30 focus:outline-none focus:border-amber-400 transition-colors"
           />
           <div className="flex items-center justify-between mt-2">
-            <span className="text-white/30 text-xs">
+            <span className="text-white/30 text-xs md:text-sm">
               {content.length} / {MAX_CHARS}
             </span>
             <button
               type="submit"
               disabled={!content.trim() || submitting}
-              className="bg-amber-400 text-black text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg hover:bg-amber-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="bg-amber-400 text-black text-xs md:text-sm font-bold uppercase tracking-widest px-5 py-2 rounded-lg hover:bg-amber-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {submitting ? "Enviando…" : "Comentar"}
             </button>
@@ -102,27 +102,27 @@ export default function Comments({ movieSlug }) {
       )}
 
       {!user && user !== undefined && (
-        <p className="text-white/40 text-sm mb-8">Inicia sesión para comentar</p>
+        <p className="text-white/40 text-sm md:text-base mb-8">Inicia sesión para comentar</p>
       )}
 
       {loading ? (
-        <div className="flex items-center gap-3 text-white/30 text-sm">
+        <div className="flex items-center gap-3 text-white/30 text-sm md:text-base">
           <span className="w-4 h-4 border-2 border-white/20 border-t-amber-400 rounded-full animate-spin" />
           Cargando comentarios…
         </div>
       ) : comments.length === 0 ? (
-        <p className="text-white/30 text-sm">Sé el primero en comentar</p>
+        <p className="text-white/30 text-sm md:text-base">Sé el primero en comentar</p>
       ) : (
         <ul className="flex flex-col gap-4">
           {comments.map((comment) => (
             <li key={comment.id} className="bg-zinc-900 border border-white/[0.07] rounded-lg px-5 py-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-white text-sm font-semibold">{comment.userName}</span>
-                <span className="text-white/30 text-xs">
+                <span className="text-white text-sm md:text-base font-semibold">{comment.userName}</span>
+                <span className="text-white/30 text-xs md:text-sm">
                   {comment.createdAt ? relativeDate(comment.createdAt) : ""}
                 </span>
               </div>
-              <p className="text-white/70 text-sm leading-relaxed">{comment.content}</p>
+              <p className="text-white/70 text-sm md:text-base leading-relaxed">{comment.content}</p>
             </li>
           ))}
         </ul>

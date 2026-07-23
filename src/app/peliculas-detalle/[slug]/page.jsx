@@ -92,7 +92,7 @@ export default async function PeliculaDetalle({ params }) {
           <div className="flex flex-col gap-4 md:pt-40">
             {year && (
               <span
-                className="text-amber-400 text-[10px] font-bold tracking-[0.35em] uppercase"
+                className="text-amber-400 text-[10px] md:text-xs font-bold tracking-[0.35em] uppercase"
                 style={{ fontFamily: "var(--font-montserrat)" }}
               >
                 {year}
@@ -112,7 +112,7 @@ export default async function PeliculaDetalle({ params }) {
                 {pelicula.genero.map((g) => (
                   <span
                     key={g}
-                    className="text-[11px] text-white/55 border border-white/15 px-3 py-1 rounded-full"
+                    className="text-[11px] md:text-sm text-white/55 border border-white/15 px-3 py-1 rounded-full"
                   >
                     {g}
                   </span>
@@ -121,38 +121,41 @@ export default async function PeliculaDetalle({ params }) {
             )}
 
             {/* Créditos */}
-            <div className="flex flex-wrap gap-x-10 gap-y-2 text-sm text-white/60 mt-1">
+            <div className="flex flex-wrap gap-x-10 gap-y-2 text-sm md:text-base text-white/60 mt-1">
               {director && (
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-white/25 text-[9px] uppercase tracking-[0.25em]">Dirección</span>
+                  <span className="text-white/25 text-[9px] md:text-xs uppercase tracking-[0.25em]">Dirección</span>
                   <span>{director}</span>
                 </div>
               )}
               {pelicula?.propuestaPor && (
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-white/25 text-[9px] uppercase tracking-[0.25em]">Propuesta por</span>
+                  <span className="text-white/25 text-[9px] md:text-xs uppercase tracking-[0.25em]">Propuesta por</span>
                   <span>{pelicula.propuestaPor}</span>
                 </div>
               )}
               {pelicula?.ciclo && (
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-white/25 text-[9px] uppercase tracking-[0.25em]">Ciclo</span>
+                  <span className="text-white/25 text-[9px] md:text-xs uppercase tracking-[0.25em]">Ciclo</span>
                   <span>{pelicula.ciclo}</span>
                 </div>
               )}
             </div>
 
             {/* Sinopsis */}
-            <p className="text-white/50 text-sm leading-relaxed max-w-xl mt-2">
+            <p className="text-white/50 text-sm md:text-base leading-relaxed max-w-xl mt-2">
               {pelicula?.sinopsis}
             </p>
           </div>
         </div>
 
+        {/* ── WATCHED BY ────────────────────────────────────────── */}
+        <WatchedBy movieSlug={slug} />
+
         {/* ── VIDEO ─────────────────────────────────────────────── */}
         <div className="mb-16">
           <p
-            className="text-white/20 text-[9px] uppercase tracking-[0.3em] mb-3"
+            className="text-white/20 text-[9px] md:text-xs uppercase tracking-[0.3em] mb-3"
             style={{ fontFamily: "var(--font-montserrat)" }}
           >
             Reproducir
@@ -161,9 +164,6 @@ export default async function PeliculaDetalle({ params }) {
             <Video url={movieData?.videoSrc} subtitle={movieData?.subtitlePath} movieSlug={slug} key={slug} />
           </div>
         </div>
-
-        {/* ── WATCHED BY ────────────────────────────────────────── */}
-        <WatchedBy movieSlug={slug} />
 
         {/* ── COMMENTS ──────────────────────────────────────────── */}
         <Comments movieSlug={slug} />
@@ -182,9 +182,9 @@ export default async function PeliculaDetalle({ params }) {
               )}
             </div>
             <div>
-              <p className="text-white/25 text-[9px] uppercase tracking-[0.3em] mb-1">← Anterior</p>
+              <p className="text-white/25 text-[9px] md:text-xs uppercase tracking-[0.3em] mb-1">← Anterior</p>
               <p
-                className="text-white text-sm font-semibold line-clamp-2"
+                className="text-white text-sm md:text-base font-semibold line-clamp-2"
                 style={{ fontFamily: "var(--font-montserrat)" }}
               >
                 {prevPost.title}
@@ -194,9 +194,9 @@ export default async function PeliculaDetalle({ params }) {
 
           <Link href={`/peliculas-detalle/${nextPost.slug}`} className="group flex items-center gap-4 justify-end text-right">
             <div>
-              <p className="text-white/25 text-[9px] uppercase tracking-[0.3em] mb-1">Siguiente →</p>
+              <p className="text-white/25 text-[9px] md:text-xs uppercase tracking-[0.3em] mb-1">Siguiente →</p>
               <p
-                className="text-white text-sm font-semibold line-clamp-2"
+                className="text-white text-sm md:text-base font-semibold line-clamp-2"
                 style={{ fontFamily: "var(--font-montserrat)" }}
               >
                 {nextPost.title}

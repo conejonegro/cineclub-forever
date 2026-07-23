@@ -19,7 +19,7 @@ export default function WatchedBy({ movieSlug }) {
   return (
     <section className="mb-16 w-full md:max-w-[50%]">
       <h2
-        className="text-white/60 text-[9px] uppercase tracking-[0.3em] mb-4"
+        className="text-white/60 text-[9px] md:text-xs uppercase tracking-[0.3em] mb-4"
         style={{ fontFamily: "var(--font-montserrat)" }}
       >
         Quién la ha visto
@@ -30,8 +30,11 @@ export default function WatchedBy({ movieSlug }) {
             key={watcher.id}
             className="bg-zinc-900 border border-white/[0.07] rounded-lg px-4 py-3 flex items-center justify-between"
           >
-            <span className="text-white text-sm font-semibold">{watcher.userName}</span>
-            <span className="text-white/30 text-xs">{watcher.userEmail}</span>
+            <span className="flex items-center gap-2 text-white text-sm md:text-base font-semibold">
+              <span className="text-green-500">✓</span>
+              {watcher.userName}
+            </span>
+            <span className="text-white/30 text-xs md:text-sm">{watcher.userEmail}</span>
           </li>
         ))}
       </ul>
