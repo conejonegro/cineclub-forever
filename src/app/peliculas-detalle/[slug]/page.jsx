@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Video from "@/components/Video";
 import Comments from "@/components/Comments";
+import WatchedBy from "@/components/WatchedBy";
 import { Subtitles } from "@/lib/subtitles";
 import TMDBApiCall from "@/lib/TMBDApiCall";
 import getCredits from "@/lib/TMDB_credits_call";
@@ -157,9 +158,12 @@ export default async function PeliculaDetalle({ params }) {
             Reproducir
           </p>
           <div className="w-full aspect-video bg-black rounded-sm overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)]">
-            <Video url={movieData?.videoSrc} subtitle={movieData?.subtitlePath} key={slug} />
+            <Video url={movieData?.videoSrc} subtitle={movieData?.subtitlePath} movieSlug={slug} key={slug} />
           </div>
         </div>
+
+        {/* ── WATCHED BY ────────────────────────────────────────── */}
+        <WatchedBy movieSlug={slug} />
 
         {/* ── COMMENTS ──────────────────────────────────────────── */}
         <Comments movieSlug={slug} />
