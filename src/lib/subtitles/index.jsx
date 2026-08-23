@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "55420",
+      name: "otro-mundo",
+      videoSrc: "https://mcseguros.com.mx/cineclub/another-earth.mp4",
+      subtitlePath: "/subtitles/another-earth-subs-esp.vtt",
+      ciclo: "Snob",
+      propuestaPor: "Diega",
+    },
+    {
       tmdb_ID: "10843",
       name: "despues-de-hora",
       videoSrc: "https://mcseguros.com.mx/cineclub/after-hours.mp4",
