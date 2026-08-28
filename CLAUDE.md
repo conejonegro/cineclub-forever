@@ -36,6 +36,18 @@ At runtime, `src/lib/TMBDApiCall.jsx` takes that array and fetches enriched meta
 
 **Authentication** uses Firebase Auth (Google OAuth + email/password). `src/components/UserProvider.jsx` provides a `UserContext` wrapping the whole app. Auth state persists via `browserLocalPersistence`.
 
+### Adding a movie to `src/lib/subtitles/index.jsx`
+
+New entries always go at the **start** of the array. Field conventions:
+
+- `name`: Spanish slug (kebab-case, no accents) matching the movie's title as shown on TMDB with `language=es-MX` — this is NOT necessarily the same as the video/subtitle file names.
+- `videoSrc`: `https://mcseguros.com.mx/cineclub/{english-title-slug}.mp4`
+- `subtitlePath`: `/subtitles/{english-title-slug}-subs-esp.vtt`
+
+The `{english-title-slug}` used for `videoSrc`/`subtitlePath` is whatever slug the user gives for the actual hosted file names — it's independent of the Spanish `name` slug.
+
+`ciclo` and `propuestaPor` are always supplied by the user — never infer or guess them.
+
 ### Key Directories
 
 - `src/lib/subtitles/index.jsx` — add/edit movies here
