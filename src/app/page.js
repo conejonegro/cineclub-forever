@@ -151,8 +151,14 @@ export default function HomePage() {
 
           <div className="flex items-center gap-5 flex-wrap">
             <Link
-              href="/solicitar-pelicula"
+              href="/ciclos/snob"
               className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-black text-sm font-bold px-7 py-3 rounded-full transition-colors"
+            >
+              Ver ciclo Snob →
+            </Link>
+            <Link
+              href="/solicitar-pelicula"
+              className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white text-sm font-bold px-7 py-3 rounded-full transition-colors"
             >
               Proponer una película →
             </Link>
