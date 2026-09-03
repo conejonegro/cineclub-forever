@@ -32,14 +32,16 @@ const Video = ({ url, subtitle, movieSlug }) => {
       onTimeUpdate={handleTimeUpdate}
     >
       <source src={url} type="video/mp4" />
-      <track
-        label="Subtítulos"
-        kind="subtitles"
-        crossOrigin="anonymous"
-        src={subtitle}
-        srcLang="es"
-        default
-      />
+      {subtitle && (
+        <track
+          label="Subtítulos"
+          kind="subtitles"
+          crossOrigin="anonymous"
+          src={subtitle}
+          srcLang="es"
+          default
+        />
+      )}
     </video>
   );
 };

@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "1443576",
+      name: "los-domingos",
+      videoSrc: "https://cineclub-forever.b-cdn.net/los-domingos.mp4",
+      subtitlePath: null,
+      ciclo: "Libre",
+      propuestaPor: "Luis",
+    },
+    {
       tmdb_ID: "281",
       name: "dias-extranos",
       videoSrc: "https://mcseguros.com.mx/cineclub/strange-days.mp4",
