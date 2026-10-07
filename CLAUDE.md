@@ -55,6 +55,9 @@ The `{english-title-slug}` used for `videoSrc`/`subtitlePath` is whatever slug t
 - `src/lib/getReviews/reviews.js` — Firestore queries for the reviews system
 - `src/components/FirebaseSettings.js` — Firebase app initialization
 - `public/subtitles/` — VTT subtitle files
+- `src/lib/premiadas/` — festival winners data (one file per festival edition, registered in `festivales.js`)
+- `specs/` — feature specs (what a feature does)
+- `docs/adr/` — Architecture Decision Records (why a technical decision was made). Read the relevant ADRs before changing something they cover. When making a significant technical decision (new API/service, data model or Firestore schema change, replacing an approach), add a new ADR from `docs/adr/TEMPLATE.md` and list it in `docs/adr/README.md`. Never rewrite an accepted ADR: supersede it with a new one.
 
 ### Path Alias
 
