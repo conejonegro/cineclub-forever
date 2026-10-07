@@ -18,6 +18,19 @@ export default function SolicitarPeliculaPage() {
 
   const debounceRef = useRef(null);
 
+  // Si llegamos con ?tmdb=ID (ej. desde Ganadoras de Cannes), preseleccionamos esa película
+  useEffect(() => {
+    const tmdbId = new URLSearchParams(window.location.search).get("tmdb");
+    if (!tmdbId) return;
+    fetch(`/api/tmdb-search?id=${encodeURIComponent(tmdbId)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const movie = data?.movies?.[0];
+        if (movie) setSelectedMovie(movie);
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     if (!searchQuery.trim() || selectedMovie) {
       setSearchResults([]);
@@ -28,7 +41,7 @@ export default function SolicitarPeliculaPage() {
       setSearching(true);
       try {
         const res = await fetch(
-          `/api/yts-search?q=${encodeURIComponent(searchQuery.trim())}`
+          `/api/tmdb-search?q=${encodeURIComponent(searchQuery.trim())}`
         );
         const data = await res.json();
         setSearchResults(data?.movies ?? []);
@@ -64,8 +77,10 @@ export default function SolicitarPeliculaPage() {
         name,
         email,
         movie_title: selectedMovie.title,
-        yts_id: selectedMovie.id ?? null,
-        yts_cover: selectedMovie.medium_cover_image ?? null,
+        original_title: selectedMovie.original_title ?? null,
+        tmdb_id: selectedMovie.id ?? null,
+        year: selectedMovie.year ?? null,
+        poster_path: selectedMovie.poster_path ?? null,
         created_at: serverTimestamp(),
       });
       setStatus("success");
@@ -101,7 +116,7 @@ export default function SolicitarPeliculaPage() {
             Propón una película para la próxima sesión del cineclub.
           </p>
           <p className="text-amber-400/60 text-xs mt-1.5">
-            Usa el nombre original, ej. <span className="italic">The Matrix</span> en lugar de <span className="italic">La Matriz</span>.
+            Puedes buscarla en español o con su título original.
           </p>
         </div>
 
@@ -140,11 +155,11 @@ export default function SolicitarPeliculaPage() {
 
                 {selectedMovie ? (
                   /* Selected movie card */
-                  <div className={`bg-white/[0.04] border rounded-md px-3 py-3 flex flex-col gap-2.5 ${selectedMovie.yts_available === false ? "border-orange-400/30" : "border-amber-400/30"}`}>
+                  <div className={`bg-white/[0.04] border rounded-md px-3 py-3 flex flex-col gap-2.5 ${selectedMovie.id ? "border-amber-400/30" : "border-orange-400/30"}`}>
                     <div className="flex items-start gap-3">
-                      {selectedMovie.medium_cover_image && (
+                      {selectedMovie.poster_path && (
                         <img
-                          src={selectedMovie.medium_cover_image}
+                          src={`${process.env.NEXT_PUBLIC_IMG_PATH}${selectedMovie.poster_path}`}
                           alt={selectedMovie.title}
                           className="w-10 h-14 object-cover rounded-sm flex-shrink-0"
                         />
@@ -156,28 +171,16 @@ export default function SolicitarPeliculaPage() {
                         >
                           {selectedMovie.title}
                         </p>
+                        {selectedMovie.original_title && selectedMovie.original_title !== selectedMovie.title && (
+                          <p className="text-white/40 text-xs italic mt-0.5">{selectedMovie.original_title}</p>
+                        )}
                         <p className="text-white/30 text-xs mt-0.5">{selectedMovie.year}</p>
 
-                        {/* YTS badge */}
-                        {selectedMovie.yts_available === false ? (
+                        {!selectedMovie.id && (
                           <div className="mt-2">
                             <p className="text-white/30 text-[10px] leading-relaxed">
-                              No está en nuestra base de datos, pero la buscaremos.
+                              No la encontramos en TMDB, pero la buscaremos.
                             </p>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                            <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-400/80 bg-emerald-400/10 px-1.5 py-0.5 rounded">
-                              Disponible en YTS
-                            </span>
-                            {selectedMovie.torrents?.map((t, i) => (
-                              <span
-                                key={`${t.quality}-${i}`}
-                                className="text-[9px] font-mono text-white/30 bg-white/[0.05] px-1.5 py-0.5 rounded"
-                              >
-                                {t.quality}
-                              </span>
-                            ))}
                           </div>
                         )}
                       </div>
@@ -222,9 +225,9 @@ export default function SolicitarPeliculaPage() {
                               }}
                               className="w-full flex items-center gap-3 px-3 py-2 rounded-md bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.07] hover:border-amber-400/20 transition-colors duration-150 text-left"
                             >
-                              {movie.medium_cover_image && (
+                              {movie.poster_path && (
                                 <img
-                                  src={movie.medium_cover_image}
+                                  src={`${process.env.NEXT_PUBLIC_IMG_PATH}${movie.poster_path}`}
                                   alt={movie.title}
                                   className="w-7 h-10 object-cover rounded-sm flex-shrink-0"
                                 />
@@ -236,7 +239,11 @@ export default function SolicitarPeliculaPage() {
                                 >
                                   {movie.title}
                                 </p>
-                                <p className="text-white/30 text-[10px]">{movie.year}</p>
+                                <p className="text-white/30 text-[10px] truncate">
+                                  {[movie.original_title !== movie.title && movie.original_title, movie.year]
+                                    .filter(Boolean)
+                                    .join(" · ")}
+                                </p>
                               </div>
                             </button>
                           </li>
@@ -244,14 +251,14 @@ export default function SolicitarPeliculaPage() {
                       </ul>
                     )}
 
-                    {/* No YTS results — fallback option */}
+                    {/* No TMDB results — fallback option */}
                     {!searching && searchQuery.trim().length > 1 && searchResults.length === 0 && (
                       <div className="mt-2 flex flex-col gap-1.5">
-                        <p className="text-red-400/70 text-xs">No se encontró en YTS.</p>
+                        <p className="text-red-400/70 text-xs">No se encontró en TMDB.</p>
                         <button
                           type="button"
                           onClick={() => {
-                            setSelectedMovie({ title: searchQuery.trim(), year: null, medium_cover_image: null, torrents: null, yts_available: false });
+                            setSelectedMovie({ id: null, title: searchQuery.trim(), original_title: null, year: null, poster_path: null });
                             setSearchResults([]);
                           }}
                           className="w-full flex items-center gap-2 px-3 py-2.5 rounded-md bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.07] hover:border-orange-400/20 transition-colors duration-150 text-left"

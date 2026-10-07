@@ -51,41 +51,77 @@ export default function PeliculasSolicitadasPage() {
       setVotedMovieKeys(userKeys);
     }
 
-    const counts = requestsSnapshot.docs.reduce((acc, movieDoc) => {
-      const title = movieDoc.data().movie_title?.trim().toLowerCase();
-      if (!title) return acc;
-      const display = movieDoc.data().movie_title?.trim();
-      if (!acc[title]) {
-        acc[title] = { display, count: 0, ids: [], requesters: [] };
-      }
-      acc[title].count += 1;
-      acc[title].ids.push(movieDoc.id);
-      const { name, email } = movieDoc.data();
-      if (name || email) acc[title].requesters.push({ name, email });
-      return acc;
-    }, {});
+    const requests = requestsSnapshot.docs.map((movieDoc) => ({
+      id: movieDoc.id,
+      ...movieDoc.data(),
+    }));
 
-    const sorted = Object.values(counts).sort((a, b) => b.count - a.count);
-
-    const tmdbResults = await Promise.all(
-      sorted.map(async ({ display }) => {
+    // Solicitudes viejas (antes de TMDB) solo tienen título: les buscamos su tmdb_id por título
+    const legacyTitles = [
+      ...new Set(
+        requests
+          .filter((r) => !r.tmdb_id && r.movie_title?.trim())
+          .map((r) => r.movie_title.trim())
+      ),
+    ];
+    const legacyMatches = {};
+    await Promise.all(
+      legacyTitles.map(async (title) => {
         try {
           const res = await fetch(
-            `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${encodeURIComponent(display)}&language=es-MX`
+            `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=es-MX`
           );
           const data = await res.json();
-          return data.results?.[0] ?? null;
+          legacyMatches[title.toLowerCase()] = data.results?.[0] ?? null;
         } catch {
-          return null;
+          legacyMatches[title.toLowerCase()] = null;
         }
       })
     );
 
-    const enriched = sorted.map((item, i) => ({
-      ...item,
-      tmdb: tmdbResults[i],
-      voteCount: voteCountsByKey[item.display.trim().toLowerCase()] ?? 0,
-    }));
+    // Agrupamos por tmdb_id; si una solicitud vieja no tuvo match, se agrupa por título
+    const groups = {};
+    requests.forEach((r) => {
+      const title = r.movie_title?.trim();
+      if (!title) return;
+      const legacyMatch = r.tmdb_id ? null : legacyMatches[title.toLowerCase()];
+      const tmdbId = r.tmdb_id ?? legacyMatch?.id ?? null;
+      const key = tmdbId ? `tmdb-${tmdbId}` : title.toLowerCase();
+
+      if (!groups[key]) {
+        groups[key] = {
+          key,
+          display: legacyMatch?.title ?? title,
+          posterPath: r.poster_path ?? legacyMatch?.poster_path ?? null,
+          count: 0,
+          ids: [],
+          requesters: [],
+          legacyKeys: new Set(),
+        };
+      }
+      const group = groups[key];
+      // Preferimos los datos guardados por solicitudes nuevas sobre los del match por título
+      if (r.tmdb_id) {
+        group.display = title;
+        group.posterPath = r.poster_path ?? group.posterPath;
+      }
+      if (!r.tmdb_id) group.legacyKeys.add(title.toLowerCase());
+      group.count += 1;
+      group.ids.push(r.id);
+      if (r.name || r.email) group.requesters.push({ name: r.name, email: r.email });
+    });
+
+    // Los votos viejos se guardaron por título en minúsculas; los nuevos por la key del grupo
+    const enriched = Object.values(groups)
+      .map((group) => {
+        const voteKeys = [group.key, ...group.legacyKeys];
+        return {
+          ...group,
+          voteKeys,
+          voteCount: voteKeys.reduce((sum, k) => sum + (voteCountsByKey[k] ?? 0), 0),
+        };
+      })
+      .sort((a, b) => b.count - a.count);
     setGrouped(enriched);
   }
 
@@ -97,7 +133,7 @@ export default function PeliculasSolicitadasPage() {
   async function handleDelete(ids, key) {
     if (!confirm("¿Borrar todas las solicitudes de esta película?")) return;
     await Promise.all(ids.map((id) => deleteDoc(doc(db, "movie_requests", id))));
-    setGrouped((prev) => prev.filter((item) => item.display.toLowerCase() !== key));
+    setGrouped((prev) => prev.filter((item) => item.key !== key));
   }
 
   async function handleVote(movieKey) {
@@ -107,7 +143,7 @@ export default function PeliculasSolicitadasPage() {
     setVotedMovieKeys((prev) => new Set([...prev, movieKey]));
     setGrouped((prev) =>
       prev.map((item) =>
-        item.display.trim().toLowerCase() === movieKey
+        item.key === movieKey
           ? { ...item, voteCount: item.voteCount + 1 }
           : item
       )
@@ -194,18 +230,17 @@ export default function PeliculasSolicitadasPage() {
         {/* Grid */}
         {grouped?.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-            {grouped.map(({ display, ids, requesters, tmdb, voteCount }, index) => {
-              const movieKey = display.trim().toLowerCase();
-              const alreadyVoted = votedMovieKeys.has(movieKey);
+            {grouped.map(({ key: movieKey, display, posterPath, ids, requesters, voteKeys, voteCount }, index) => {
+              const alreadyVoted = voteKeys.some((k) => votedMovieKeys.has(k));
               return (
                 <div key={movieKey} className="flex flex-col gap-2">
 
                   {/* Poster */}
                   <div className="relative w-full aspect-[2/3] rounded-sm overflow-hidden bg-white/[0.04] border border-white/[0.08]">
-                    {tmdb?.poster_path && (
+                    {posterPath && (
                       <img
-                        src={`${process.env.NEXT_PUBLIC_IMG_PATH}${tmdb.poster_path}`}
-                        alt={tmdb?.title ?? display}
+                        src={`${process.env.NEXT_PUBLIC_IMG_PATH}${posterPath}`}
+                        alt={display}
                         className="w-full h-full object-cover"
                       />
                     )}
@@ -230,7 +265,7 @@ export default function PeliculasSolicitadasPage() {
                       className="text-white/90 text-xs font-semibold leading-snug line-clamp-2"
                       style={{ fontFamily: "var(--font-montserrat)" }}
                     >
-                      {tmdb?.title ?? display}
+                      {display}
                     </p>
                     {requesters.length > 0 && (
                       <p className="text-white/30 text-[10px] truncate">
