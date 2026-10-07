@@ -6,36 +6,100 @@ import { UserContext } from "./UserProvider";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { getCiclos } from "@/lib/ciclos/ciclosData";
+import { festivales } from "@/lib/premiadas/festivales";
 
 const navItems = [
   { text: "Ciclos", item_url: "/ciclos" },
   { text: "Reviews", item_url: "/reviews" },
+  { text: "Premiadas", item_url: "/premiadas" },
   { text: "Películas solicitadas", item_url: "/peliculas-solicitadas" },
 ];
 
-export default function NavComponent() {
-  const { user } = useContext(UserContext);
-  const [open, setOpen] = useState(false);
-  const [ciclosOpen, setCiclosOpen] = useState(false);
-  const pathname = usePathname();
-  const ciclosRef = useRef(null);
-  const ciclos = getCiclos();
+// Link con flechita que abre un menú de sub-páginas (ej. Ciclos, Premiadas)
+function NavDropdown({ text, href, items, ariaLabel }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const close = () => setOpen(false);
-  const closeCiclos = () => setCiclosOpen(false);
+  const closeDropdown = () => setDropdownOpen(false);
 
   useEffect(() => {
-    if (!ciclosOpen) return;
+    if (!dropdownOpen) return;
 
     function handleClickOutside(event) {
-      if (ciclosRef.current && !ciclosRef.current.contains(event.target)) {
-        closeCiclos();
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        closeDropdown();
       }
     }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [ciclosOpen]);
+  }, [dropdownOpen]);
+
+  return (
+    <div ref={dropdownRef} className="relative flex items-center gap-1">
+      <Link
+        href={href}
+        onClick={closeDropdown}
+        className="text-white/70 hover:text-white text-sm transition-colors duration-200"
+        style={{ fontFamily: "var(--font-montserrat)" }}
+      >
+        {text}
+      </Link>
+      <button
+        onClick={() => setDropdownOpen((v) => !v)}
+        aria-label={ariaLabel}
+        aria-expanded={dropdownOpen}
+        className="text-white/70 hover:text-white transition-colors duration-200"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className={`w-3.5 h-3.5 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+
+      {dropdownOpen && (
+        <div className="absolute top-full left-0 mt-3 min-w-[180px] bg-[#141414] border border-white/[0.08] rounded-xl py-2 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+          {items.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={closeDropdown}
+              className="block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.05] transition-colors duration-150"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              {item.text}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function NavComponent() {
+  const { user } = useContext(UserContext);
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const ciclos = getCiclos();
+
+  const close = () => setOpen(false);
+
+  // Links del menú que abren un desplegable en desktop
+  const dropdowns = {
+    "/ciclos": {
+      ariaLabel: "Ver ciclos",
+      items: ciclos.map((c) => ({ text: c.nombre, href: `/ciclos/${c.slug}` })),
+    },
+    "/premiadas": {
+      ariaLabel: "Ver festivales",
+      items: festivales.map((f) => ({ text: f.nombre, href: `/premiadas/${f.slug}` })),
+    },
+  };
 
   const allLinks = [
     ...navItems,
@@ -71,52 +135,16 @@ export default function NavComponent() {
 
           {/* Links desktop */}
           <div className="hidden md:flex items-center gap-8">
-            <div ref={ciclosRef} className="relative flex items-center gap-1">
-              <Link
-                href="/ciclos"
-                onClick={closeCiclos}
-                className="text-white/70 hover:text-white text-sm transition-colors duration-200"
-                style={{ fontFamily: "var(--font-montserrat)" }}
-              >
-                Ciclos
-              </Link>
-              <button
-                onClick={() => setCiclosOpen((v) => !v)}
-                aria-label="Ver ciclos"
-                aria-expanded={ciclosOpen}
-                className="text-white/70 hover:text-white transition-colors duration-200"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${ciclosOpen ? "rotate-180" : ""}`}
-                >
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
-              </button>
-
-              {ciclosOpen && (
-                <div className="absolute top-full left-0 mt-3 min-w-[180px] bg-[#141414] border border-white/[0.08] rounded-xl py-2 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-                  {ciclos.map((ciclo) => (
-                    <Link
-                      key={ciclo.slug}
-                      href={`/ciclos/${ciclo.slug}`}
-                      onClick={closeCiclos}
-                      className="block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.05] transition-colors duration-150"
-                      style={{ fontFamily: "var(--font-montserrat)" }}
-                    >
-                      {ciclo.nombre}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {navItems
-              .filter((item) => item.item_url !== "/ciclos")
-              .map((item) => (
+            {navItems.map((item) =>
+              dropdowns[item.item_url] ? (
+                <NavDropdown
+                  key={item.item_url}
+                  text={item.text}
+                  href={item.item_url}
+                  items={dropdowns[item.item_url].items}
+                  ariaLabel={dropdowns[item.item_url].ariaLabel}
+                />
+              ) : (
                 <Link
                   key={item.item_url}
                   href={item.item_url}
@@ -125,7 +153,8 @@ export default function NavComponent() {
                 >
                   {item.text}
                 </Link>
-              ))}
+              )
+            )}
           </div>
 
           {/* Auth desktop */}
