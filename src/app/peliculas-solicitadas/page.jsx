@@ -13,6 +13,8 @@ import {
 import { db } from "@/components/FirebaseSettings";
 import { UserContext } from "@/components/UserProvider";
 import Link from "next/link";
+import { getCatalogSlug } from "@/lib/catalogo";
+import { searchFirstTmdbMovie } from "@/lib/tmdbSearch";
 
 export default function PeliculasSolicitadasPage() {
   const [grouped, setGrouped] = useState(null);
@@ -67,15 +69,7 @@ export default function PeliculasSolicitadasPage() {
     const legacyMatches = {};
     await Promise.all(
       legacyTitles.map(async (title) => {
-        try {
-          const res = await fetch(
-            `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=es-MX`
-          );
-          const data = await res.json();
-          legacyMatches[title.toLowerCase()] = data.results?.[0] ?? null;
-        } catch {
-          legacyMatches[title.toLowerCase()] = null;
-        }
+        legacyMatches[title.toLowerCase()] = await searchFirstTmdbMovie(title);
       })
     );
 
@@ -91,6 +85,7 @@ export default function PeliculasSolicitadasPage() {
       if (!groups[key]) {
         groups[key] = {
           key,
+          catalogSlug: getCatalogSlug(tmdbId),
           display: legacyMatch?.title ?? title,
           posterPath: r.poster_path ?? legacyMatch?.poster_path ?? null,
           count: 0,
@@ -156,6 +151,96 @@ export default function PeliculasSolicitadasPage() {
     });
   }
 
+  // Solicitudes pendientes (con ranking y votos) vs. las que ya subimos al catálogo
+  const pending = grouped?.filter((item) => !item.catalogSlug) ?? null;
+  const available = grouped?.filter((item) => item.catalogSlug) ?? null;
+
+  function renderCard({ key: movieKey, catalogSlug, display, posterPath, ids, requesters, voteKeys, voteCount }, rank) {
+    const alreadyVoted = voteKeys.some((k) => votedMovieKeys.has(k));
+    return (
+      <div key={movieKey} className="flex flex-col gap-2">
+
+        {/* Poster */}
+        <div className="relative w-full aspect-[2/3] rounded-sm overflow-hidden bg-white/[0.04] border border-white/[0.08]">
+          {posterPath && (
+            <img
+              src={`${process.env.NEXT_PUBLIC_IMG_PATH}${posterPath}`}
+              alt={display}
+              className="w-full h-full object-cover"
+            />
+          )}
+          {/* Rank badge (pending) or availability badge */}
+          {catalogSlug ? (
+            <span
+              className="absolute top-2 left-2 text-[9px] font-bold uppercase tracking-widest text-black bg-emerald-400 px-1.5 py-0.5 rounded"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              Disponible
+            </span>
+          ) : (
+            <span className="absolute top-2 left-2 text-[10px] font-bold text-white/60 bg-black/50 px-1.5 py-0.5 rounded font-mono">
+              {rank + 1}
+            </span>
+          )}
+          {/* Admin delete */}
+          {isAdmin && (
+            <button
+              onClick={() => handleDelete(ids, movieKey)}
+              className="absolute top-2 right-2 text-[10px] text-white/40 hover:text-red-400 bg-black/50 px-1.5 py-0.5 rounded transition-colors duration-200"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="flex flex-col gap-1 px-0.5">
+          <p
+            className="text-white/90 text-xs font-semibold leading-snug line-clamp-2"
+            style={{ fontFamily: "var(--font-montserrat)" }}
+          >
+            {display}
+          </p>
+          {requesters.length > 0 && (
+            <p className="text-white/30 text-[10px] truncate">
+              {requesters.map((r) => r.name ?? r.email).join(", ")}
+            </p>
+          )}
+
+          {/* Watch (available) or vote (pending) */}
+          {catalogSlug ? (
+            <Link
+              href={`/peliculas-detalle/${catalogSlug}`}
+              className="mt-0.5 text-emerald-400 hover:text-emerald-300 text-xs font-bold transition-colors duration-200 w-fit"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              Ver ahora →
+            </Link>
+          ) : user ? (
+            <button
+              onClick={() => !alreadyVoted && handleVote(movieKey)}
+              disabled={alreadyVoted}
+              className={`mt-0.5 flex items-center gap-1 text-xs font-bold transition-colors duration-200 w-fit ${
+                alreadyVoted
+                  ? "text-amber-400/50 cursor-default"
+                  : "text-amber-400 hover:text-amber-300 cursor-pointer"
+              }`}
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              <span>{alreadyVoted ? "✓" : "↑"}</span>
+              <span>{voteCount} {voteCount === 1 ? "voto" : "votos"}</span>
+            </button>
+          ) : (
+            <span className="text-white/25 text-[10px] tabular-nums mt-0.5">
+              {voteCount} {voteCount === 1 ? "voto" : "votos"}
+            </span>
+          )}
+        </div>
+
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#0d0d0d]">
       <div className="max-w-6xl mx-auto px-6 md:px-14 py-14">
@@ -200,9 +285,9 @@ export default function PeliculasSolicitadasPage() {
             Solicitudes
           </span>
           <div className="h-px flex-1 bg-white/10" />
-          {grouped && (
+          {pending && (
             <span className="text-white/20 text-[10px] tracking-widest">
-              {grouped.length} {grouped.length === 1 ? "película" : "películas"}
+              {pending.length} {pending.length === 1 ? "película" : "películas"}
             </span>
           )}
         </div>
@@ -221,83 +306,40 @@ export default function PeliculasSolicitadasPage() {
         )}
 
         {/* Empty state */}
-        {grouped?.length === 0 && (
+        {pending?.length === 0 && (
           <p className="text-white/30 text-sm text-center py-20">
-            Aún no hay solicitudes. ¡Sé el primero en pedir una película!
+            Aún no hay solicitudes pendientes. ¡Sé el primero en pedir una película!
           </p>
         )}
 
-        {/* Grid */}
-        {grouped?.length > 0 && (
+        {/* Pending grid */}
+        {pending?.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-            {grouped.map(({ key: movieKey, display, posterPath, ids, requesters, voteKeys, voteCount }, index) => {
-              const alreadyVoted = voteKeys.some((k) => votedMovieKeys.has(k));
-              return (
-                <div key={movieKey} className="flex flex-col gap-2">
+            {pending.map((item, index) => renderCard(item, index))}
+          </div>
+        )}
 
-                  {/* Poster */}
-                  <div className="relative w-full aspect-[2/3] rounded-sm overflow-hidden bg-white/[0.04] border border-white/[0.08]">
-                    {posterPath && (
-                      <img
-                        src={`${process.env.NEXT_PUBLIC_IMG_PATH}${posterPath}`}
-                        alt={display}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                    {/* Rank badge */}
-                    <span className="absolute top-2 left-2 text-[10px] font-bold text-white/60 bg-black/50 px-1.5 py-0.5 rounded font-mono">
-                      {index + 1}
-                    </span>
-                    {/* Admin delete */}
-                    {isAdmin && (
-                      <button
-                        onClick={() => handleDelete(ids, movieKey)}
-                        className="absolute top-2 right-2 text-[10px] text-white/40 hover:text-red-400 bg-black/50 px-1.5 py-0.5 rounded transition-colors duration-200"
-                      >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex flex-col gap-1 px-0.5">
-                    <p
-                      className="text-white/90 text-xs font-semibold leading-snug line-clamp-2"
-                      style={{ fontFamily: "var(--font-montserrat)" }}
-                    >
-                      {display}
-                    </p>
-                    {requesters.length > 0 && (
-                      <p className="text-white/30 text-[10px] truncate">
-                        {requesters.map((r) => r.name ?? r.email).join(", ")}
-                      </p>
-                    )}
-
-                    {/* Vote */}
-                    {user ? (
-                      <button
-                        onClick={() => !alreadyVoted && handleVote(movieKey)}
-                        disabled={alreadyVoted}
-                        className={`mt-0.5 flex items-center gap-1 text-xs font-bold transition-colors duration-200 w-fit ${
-                          alreadyVoted
-                            ? "text-amber-400/50 cursor-default"
-                            : "text-amber-400 hover:text-amber-300 cursor-pointer"
-                        }`}
-                        style={{ fontFamily: "var(--font-montserrat)" }}
-                      >
-                        <span>{alreadyVoted ? "✓" : "↑"}</span>
-                        <span>{voteCount} {voteCount === 1 ? "voto" : "votos"}</span>
-                      </button>
-                    ) : (
-                      <span className="text-white/25 text-[10px] tabular-nums mt-0.5">
-                        {voteCount} {voteCount === 1 ? "voto" : "votos"}
-                      </span>
-                    )}
-                  </div>
-
-                </div>
-              );
-            })}
+        {/* Already in the catalog */}
+        {available?.length > 0 && (
+          <div className="mt-16">
+            <div className="flex items-center gap-4 mb-3">
+              <span
+                className="text-emerald-400/70 text-[10px] font-semibold tracking-[0.35em] uppercase"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
+                Ya están en el catálogo
+              </span>
+              <div className="h-px flex-1 bg-white/10" />
+              <span className="text-white/20 text-[10px] tracking-widest">
+                {available.length} {available.length === 1 ? "película" : "películas"}
+              </span>
+            </div>
+            <p className="text-white/40 text-sm mb-8">
+              Las pidieron y ya las subimos. Gracias por proponer.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+              {available.map((item) => renderCard(item, null))}
+            </div>
           </div>
         )}
 

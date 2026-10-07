@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { festivales, getFestival } from "@/lib/premiadas/festivales";
 import FestivalIcon from "@/components/FestivalIcon";
+import { getCatalogSlug } from "@/lib/catalogo";
 
 export function generateStaticParams() {
   return festivales.map((f) => ({ slug: f.slug }));
@@ -38,6 +39,7 @@ async function withTmdbData(list) {
     posterPath: tmdbMovies[i]?.poster_path ?? null,
     year: tmdbMovies[i]?.release_date?.slice(0, 4) ?? null,
     overview: tmdbMovies[i]?.overview || null,
+    catalogSlug: getCatalogSlug(m.tmdbId),
   }));
 }
 
@@ -179,13 +181,23 @@ function MovieCard({ movie }) {
           >
             Ver ficha ↗
           </a>
-          <Link
-            href={`/solicitar-pelicula?tmdb=${movie.tmdbId}`}
-            className="text-amber-400 hover:text-amber-300 text-[11px] font-bold transition-colors duration-200"
-            style={{ fontFamily: "var(--font-montserrat)" }}
-          >
-            Solicitarla →
-          </Link>
+          {movie.catalogSlug ? (
+            <Link
+              href={`/peliculas-detalle/${movie.catalogSlug}`}
+              className="text-emerald-400 hover:text-emerald-300 text-[11px] font-bold transition-colors duration-200"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              Verla ahora →
+            </Link>
+          ) : (
+            <Link
+              href={`/solicitar-pelicula?tmdb=${movie.tmdbId}`}
+              className="text-amber-400 hover:text-amber-300 text-[11px] font-bold transition-colors duration-200"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              Solicitarla →
+            </Link>
+          )}
         </div>
       </div>
 

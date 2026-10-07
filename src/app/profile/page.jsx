@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { UserContext } from "@/components/UserProvider";
 import Image from "next/image";
 import { FaUserCircle } from "react-icons/fa";
+import MisSolicitudes from "@/components/MisSolicitudes";
 
 function ProfilePage() {
   const router = useRouter();
@@ -107,6 +108,8 @@ function ProfilePage() {
           </button>
 
         </div>
+
+        <MisSolicitudes email={userData.email} />
 
       </div>
     </main>

@@ -14,3 +14,5 @@ Registro de las decisiones técnicas importantes del proyecto: qué se decidió,
 | [0002](0002-tmdb-como-buscador-de-solicitudes.md) | TMDB en lugar de YTS como buscador de solicitudes | Aceptado |
 | [0003](0003-agrupar-solicitudes-por-tmdb-id.md) | Agrupar solicitudes por `tmdb_id` sin migrar datos viejos | Aceptado |
 | [0004](0004-datos-de-festivales-hardcodeados.md) | Datos de festivales en archivos locales; TMDB solo para medios | Aceptado |
+| [0005](0005-disponibilidad-derivada-del-catalogo.md) | El estado "disponible" se deriva del catálogo, no se guarda | Aceptado |
+| [0006](0006-titulo-en-ingles-como-respaldo.md) | Título en inglés como respaldo cuando TMDB no tiene uno legible | Aceptado |

@@ -9,6 +9,29 @@ function toMovie(movie) {
   };
 }
 
+// Detecta títulos en otro alfabeto (japonés, coreano, cirílico...); acentos y signos sí pasan
+const NON_LATIN = /[^\p{Script=Latin}\p{Script=Common}\p{Script=Inherited}]/u;
+
+// Si TMDB no tiene el título en español y regresa uno ilegible, usamos el título en inglés
+async function withReadableTitle(movie) {
+  if (!movie.title || !NON_LATIN.test(movie.title)) return movie;
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`,
+      { cache: "no-store" }
+    );
+    if (response.ok) {
+      const english = await response.json();
+      if (english.title && !NON_LATIN.test(english.title)) {
+        return { ...movie, title: english.title };
+      }
+    }
+  } catch {
+    // Si falla, nos quedamos con el título original
+  }
+  return movie;
+}
+
 export async function GET(request) {
   // Leemos el parámetro "q" de la URL, ej: /api/tmdb-search?q=the+matrix
   // o "id" para traer una sola película, ej: /api/tmdb-search?id=603
@@ -25,7 +48,7 @@ export async function GET(request) {
       if (!response.ok) {
         return Response.json({ movies: [] });
       }
-      return Response.json({ movies: [toMovie(await response.json())] });
+      return Response.json({ movies: [await withReadableTitle(toMovie(await response.json()))] });
     } catch (error) {
       console.error("[tmdb-search] fetch by id failed:", error.message);
       return Response.json({ movies: [] });
@@ -48,7 +71,9 @@ export async function GET(request) {
     }
 
     const data = await response.json();
-    const movies = (data?.results ?? []).slice(0, 8).map(toMovie);
+    const movies = await Promise.all(
+      (data?.results ?? []).slice(0, 8).map((movie) => withReadableTitle(toMovie(movie)))
+    );
 
     return Response.json({ movies });
 

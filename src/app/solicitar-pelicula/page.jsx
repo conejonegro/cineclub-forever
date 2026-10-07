@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/components/FirebaseSettings";
 import { UserContext } from "@/components/UserProvider";
+import Link from "next/link";
+import { getCatalogSlug } from "@/lib/catalogo";
 
 export default function SolicitarPeliculaPage() {
   const { user } = useContext(UserContext);
@@ -55,12 +57,16 @@ export default function SolicitarPeliculaPage() {
     return () => clearTimeout(debounceRef.current);
   }, [searchQuery, selectedMovie]);
 
+  // Si la película elegida ya está en el catálogo, mandamos a verla en vez de solicitarla
+  const catalogSlug = getCatalogSlug(selectedMovie?.id);
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (!selectedMovie) {
       setStatus("no_movie");
       return;
     }
+    if (catalogSlug) return;
     const email = user?.email?.trim().toLowerCase();
     setLoading(true);
     setStatus(null);
@@ -181,6 +187,21 @@ export default function SolicitarPeliculaPage() {
                             <p className="text-white/30 text-[10px] leading-relaxed">
                               No la encontramos en TMDB, pero la buscaremos.
                             </p>
+                          </div>
+                        )}
+
+                        {catalogSlug && (
+                          <div className="mt-2 flex flex-col gap-1">
+                            <p className="text-emerald-400/80 text-[10px] leading-relaxed">
+                              ¡Ya está en el catálogo! No hace falta solicitarla.
+                            </p>
+                            <Link
+                              href={`/peliculas-detalle/${catalogSlug}`}
+                              className="text-emerald-400 hover:text-emerald-300 text-xs font-bold transition-colors duration-200 w-fit"
+                              style={{ fontFamily: "var(--font-montserrat)" }}
+                            >
+                              Ver ahora →
+                            </Link>
                           </div>
                         )}
                       </div>
@@ -307,7 +328,7 @@ export default function SolicitarPeliculaPage() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || Boolean(catalogSlug)}
                 className="bg-amber-400 hover:bg-amber-300 disabled:opacity-40 text-black text-sm font-bold py-3 rounded-full transition-colors duration-200"
                 style={{ fontFamily: "var(--font-montserrat)" }}
               >
