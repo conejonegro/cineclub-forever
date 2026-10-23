@@ -11,7 +11,7 @@ export const Subtitles = () => {
     {
       tmdb_ID: "1443576",
       name: "los-domingos",
-      videoSrc: "https://cineclub-forever.b-cdn.net/los-domingos.mp4",
+      videoSrc: "https://mcseguros.com.mx/cineclub/los-domingos.mp4",
       subtitlePath: null,
       ciclo: "Libre",
       propuestaPor: "Luis",

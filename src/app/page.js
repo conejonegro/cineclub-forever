@@ -121,22 +121,20 @@ export default function HomePage() {
             className="text-4xl md:text-5xl font-bold text-white leading-[1.05] mb-4"
             style={{ fontFamily: "var(--font-montserrat)" }}
           >
-            Ciclo Snob
+            Ciclo Terror - Halloween
           </h2>
 
           <p className="text-white/65 text-[15px] leading-relaxed max-w-2xl mb-7">
-            Estamos en el <span className="text-white/85 font-semibold">Ciclo Snob</span>: un grupo
-            de gente de Chihuahua con más cultura que humildad se reúne a recomendarse películas
-            entre sí. No hay reglas de género ni década: puede ser una dosmilera under o una obra
-            maestra que quieran presumir haber visto. Cada quien trae lo suyo y el resto decide qué
-            tanto trae.
+            Estamos en el <span className="text-white/85 font-semibold">Ciclo Terror - Halloween</span>:
+            temporada de sustos. Slashers, brujas, campamentos malditos y todo lo que da miedo (o
+            risa nerviosa) para ver con las luces apagadas en octubre.
           </p>
 
           <p className="text-white/30 text-[10px] font-semibold tracking-[0.25em] uppercase mb-3">
             Quién propone en este ciclo
           </p>
           <div className="flex flex-wrap gap-2 mb-8">
-            {["Jonathan", "Diego", "Walter", "Payo", "Alfred", "Luis"].map((name) => (
+            {["Luis"].map((name) => (
               <span
                 key={name}
                 className="text-xs text-white/70 border border-white/15 px-3.5 py-1.5 rounded-full"
@@ -151,10 +149,10 @@ export default function HomePage() {
 
           <div className="flex items-center gap-5 flex-wrap">
             <Link
-              href="/ciclos/snob"
+              href="/ciclos/terror-halloween"
               className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-black text-sm font-bold px-7 py-3 rounded-full transition-colors"
             >
-              Ver ciclo Snob →
+              Ver ciclo Terror - Halloween →
             </Link>
             <Link
               href="/solicitar-pelicula"
