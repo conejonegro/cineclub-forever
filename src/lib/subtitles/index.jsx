@@ -1,6 +1,14 @@
 export const Subtitles = () => {
   const sutitlesObject = [
     {
+      tmdb_ID: "1240889",
+      name: "adolescencia-sexo-y-muerte-en-campamento-miasma",
+      videoSrc: "https://mcseguros.com.mx/cineclub/miasma.mp4",
+      subtitlePath: "/subtitles/miasma-subs-esp.vtt",
+      ciclo: "Terror - Halloween",
+      propuestaPor: "Luis",
+    },
+    {
       tmdb_ID: "1443576",
       name: "los-domingos",
       videoSrc: "https://cineclub-forever.b-cdn.net/los-domingos.mp4",

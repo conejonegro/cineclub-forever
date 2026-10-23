@@ -4,6 +4,7 @@ const descripciones = {
   Snob: "Un grupo de gente de Chihuahua con más cultura que humildad se reúne a recomendarse películas entre sí. No hay reglas de género ni década: puede ser una dosmilera under o una obra maestra que quieran presumir haber visto. Cada quien trae lo suyo y el resto decide qué tanto trae.",
   Libre: "Aquí no hay tema ni pretexto: cada quien propone lo que se le antoja, sin importar género, año o qué tan rara sea la recomendación. Es el ciclo de \"me late esta, ni sé por qué, solo véanla\".",
   Teens: "Películas de crecer, de andar perdido, de esa edad en la que todo se siente exagerado. Coming of age, nostalgia y algo de incomodidad adolescente, vista con ojos de adulto.",
+  "Terror - Halloween": "Temporada de sustos: slashers, brujas, campamentos malditos y todo lo que da miedo (o risa nerviosa) para ver con las luces apagadas en octubre.",
 };
 
 function slugify(str) {
