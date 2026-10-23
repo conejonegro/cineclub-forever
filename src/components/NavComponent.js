@@ -12,6 +12,7 @@ const navItems = [
   { text: "Ciclos", item_url: "/ciclos" },
   { text: "Reviews", item_url: "/reviews" },
   { text: "Premiadas", item_url: "/premiadas" },
+  { text: "Posibles", item_url: "/posibles-peliculas" },
   { text: "Películas solicitadas", item_url: "/peliculas-solicitadas" },
 ];
 
