@@ -16,6 +16,8 @@ Create `.env.local` with:
 ```
 NEXT_PUBLIC_IMG_PATH=https://image.tmdb.org/t/p/w500
 NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key
+IG_ACCESS_TOKEN=your_instagram_token   # server/scripts only, never NEXT_PUBLIC_ (see ADR-0007)
+IG_USER_ID=your_instagram_user_id
 ```
 
 ## Architecture
@@ -56,6 +58,7 @@ The `{english-title-slug}` used for `videoSrc`/`subtitlePath` is whatever slug t
 - `src/components/FirebaseSettings.js` — Firebase app initialization
 - `public/subtitles/` — VTT subtitle files
 - `src/lib/premiadas/` — festival winners data (one file per festival edition, registered in `festivales.js`)
+- `docs/STATE.md` — current state of the app (catalog, current cycle, sections, integrations, pending items). Read it at the start of a task for context, and update it in the same change whenever something it describes changes (new movie, new cycle, new feature/integration, resolved or new pending item).
 - `specs/` — feature specs (what a feature does)
 - `docs/adr/` — Architecture Decision Records (why a technical decision was made). Read the relevant ADRs before changing something they cover. When making a significant technical decision (new API/service, data model or Firestore schema change, replacing an approach), add a new ADR from `docs/adr/TEMPLATE.md` and list it in `docs/adr/README.md`. Never rewrite an accepted ADR: supersede it with a new one.
 

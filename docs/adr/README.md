@@ -16,3 +16,4 @@ Registro de las decisiones técnicas importantes del proyecto: qué se decidió,
 | [0004](0004-datos-de-festivales-hardcodeados.md) | Datos de festivales en archivos locales; TMDB solo para medios | Aceptado |
 | [0005](0005-disponibilidad-derivada-del-catalogo.md) | El estado "disponible" se deriva del catálogo, no se guarda | Aceptado |
 | [0006](0006-titulo-en-ingles-como-respaldo.md) | Título en inglés como respaldo cuando TMDB no tiene uno legible | Aceptado |
+| [0007](0007-publicar-en-instagram-con-la-api.md) | Publicar en Instagram con la API de Instagram (Instagram Login) | Aceptado |
