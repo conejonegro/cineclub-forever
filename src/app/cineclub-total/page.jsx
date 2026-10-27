@@ -1,4 +1,3 @@
-import { Subtitles } from "@/lib/subtitles";
 import VidapiTester from "./VidapiTester";
 
 export const metadata = {
@@ -7,8 +6,6 @@ export const metadata = {
 };
 
 export default function VidapiTestPage() {
-  const catalogo = Subtitles().map((m) => ({ id: m.tmdb_ID, name: m.name }));
-
   return (
     <main className="min-h-screen bg-[#0d0d0d]">
       <div className="max-w-6xl mx-auto px-6 md:px-14 py-14">
@@ -31,7 +28,7 @@ export default function VidapiTestPage() {
           </p>
         </div>
 
-        <VidapiTester catalogo={catalogo} />
+        <VidapiTester />
       </div>
     </main>
   );

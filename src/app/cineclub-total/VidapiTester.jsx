@@ -9,7 +9,7 @@ const inputClass =
 const labelClass = "block text-white/50 text-[10px] uppercase tracking-[0.2em] mb-1 font-semibold";
 
 // Builds the vaplayer.ru embed URL from the form state (see https://vidapi.ru/api)
-function buildEmbedUrl({ type, id, season, episode, lang, color, startAt, autoplay, subUrl }) {
+function buildEmbedUrl({ type, id, season, episode, lang, autoplay, subUrl }) {
   if (!id) return null;
   const path =
     type === "tv"
@@ -18,8 +18,6 @@ function buildEmbedUrl({ type, id, season, episode, lang, color, startAt, autopl
 
   const params = new URLSearchParams();
   if (lang) params.set("ds_lang", lang);
-  if (color) params.set("primaryColor", color);
-  if (startAt) params.set("startAt", startAt);
   if (autoplay) params.set("autoplay", "1");
   if (subUrl) {
     params.set("sub_url", subUrl);
@@ -31,20 +29,19 @@ function buildEmbedUrl({ type, id, season, episode, lang, color, startAt, autopl
   return query ? `${path}?${query}` : path;
 }
 
-export default function VidapiTester({ catalogo }) {
+export default function VidapiTester() {
   const [form, setForm] = useState({
     type: "movie",
-    id: catalogo[0]?.id ?? "",
+    id: "1240889",
     season: "1",
     episode: "1",
     lang: "es",
-    color: "#e50914",
-    startAt: "",
     autoplay: false,
     subUrl: "",
   });
   const [src, setSrc] = useState(() => buildEmbedUrl(form));
   const [events, setEvents] = useState([]);
+  const [subs, setSubs] = useState({ loading: false, list: null });
 
   const previewUrl = useMemo(() => buildEmbedUrl(form), [form]);
 
@@ -74,6 +71,24 @@ export default function VidapiTester({ catalogo }) {
   const update = (key) => (e) =>
     setForm((f) => ({ ...f, [key]: e.target.type === "checkbox" ? e.target.checked : e.target.value }));
 
+  // Busca subtítulos para el ID actual a través de /api/subtitulos (Wyzie Subs)
+  const searchSubs = async () => {
+    if (!form.id) return;
+    setSubs({ loading: true, list: null });
+    const params = new URLSearchParams({ id: form.id, lang: form.lang || "es" });
+    if (form.type === "tv") {
+      params.set("season", form.season || "1");
+      params.set("episode", form.episode || "1");
+    }
+    try {
+      const response = await fetch(`/api/subtitulos?${params}`);
+      const data = await response.json();
+      setSubs({ loading: false, list: data.subtitles ?? [] });
+    } catch {
+      setSubs({ loading: false, list: [] });
+    }
+  };
+
   const load = (e) => {
     e.preventDefault();
     setEvents([]);
@@ -83,22 +98,6 @@ export default function VidapiTester({ catalogo }) {
   return (
     <div className="grid lg:grid-cols-[320px_1fr] gap-8" style={{ fontFamily: "var(--font-montserrat)" }}>
       <form onSubmit={load} className="space-y-4">
-        <div>
-          <label className={labelClass}>Del catálogo</label>
-          <select
-            className={inputClass}
-            value=""
-            onChange={(e) => e.target.value && setForm((f) => ({ ...f, type: "movie", id: e.target.value }))}
-          >
-            <option value="">Elegir película…</option>
-            {catalogo.map((m) => (
-              <option key={m.id} value={m.id} className="bg-[#0d0d0d]">
-                {m.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className={labelClass}>Tipo</label>
@@ -126,20 +125,9 @@ export default function VidapiTester({ catalogo }) {
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className={labelClass}>Idioma subs</label>
-            <input className={inputClass} value={form.lang} onChange={update("lang")} placeholder="es" />
-          </div>
-          <div>
-            <label className={labelClass}>Color</label>
-            <input type="color" className={`${inputClass} h-[38px] p-1`} value={form.color} onChange={update("color")} />
-          </div>
-        </div>
-
         <div>
-          <label className={labelClass}>Empezar en (segundos)</label>
-          <input type="number" min="0" className={inputClass} value={form.startAt} onChange={update("startAt")} />
+          <label className={labelClass}>Idioma subs</label>
+          <input className={inputClass} value={form.lang} onChange={update("lang")} placeholder="es" />
         </div>
 
         <div>
@@ -150,6 +138,42 @@ export default function VidapiTester({ catalogo }) {
             onChange={update("subUrl")}
             placeholder="https://…/miasma-subs-esp.vtt"
           />
+          <button
+            type="button"
+            onClick={searchSubs}
+            disabled={subs.loading || !form.id}
+            className="mt-2 w-full border border-white/20 text-white/80 text-xs rounded-md py-2 hover:border-white/50 hover:text-white transition-colors disabled:opacity-40"
+          >
+            {subs.loading ? "Buscando…" : "Buscar subtítulos"}
+          </button>
+          <p className="mt-2 text-white/40 text-[11px] leading-relaxed">
+            Tip: también puedes pegar el ID de IMDB (ej. tt23779058) para buscar subtítulos. Si los
+            primeros no funcionan o no están sincronizados, prueba con los demás de la lista.
+          </p>
+          {subs.list && (
+            <div className="mt-2 max-h-56 overflow-y-auto border border-white/10 rounded-md text-[11px]">
+              {subs.list.length === 0 ? (
+                <p className="text-white/30 p-2">No se encontraron subtítulos.</p>
+              ) : (
+                subs.list.map((sub) => (
+                  <button
+                    key={sub.id}
+                    type="button"
+                    onClick={() => setForm((f) => ({ ...f, subUrl: sub.url }))}
+                    className={`block w-full text-left px-2 py-2 border-b border-white/5 hover:bg-white/10 ${
+                      form.subUrl === sub.url ? "bg-white/10 text-white" : "text-white/60"
+                    }`}
+                  >
+                    <span className="block truncate">{sub.release || "Sin nombre"}</span>
+                    <span className="text-white/30">
+                      {sub.language} · {sub.format} · {sub.source}
+                      {sub.isHearingImpaired ? " · SDH" : ""}
+                    </span>
+                  </button>
+                ))
+              )}
+            </div>
+          )}
         </div>
 
         <label className="flex items-center gap-2 text-white/70 text-sm">
