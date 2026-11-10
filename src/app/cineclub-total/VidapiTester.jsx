@@ -29,19 +29,49 @@ function buildEmbedUrl({ type, id, season, episode, lang, autoplay, subUrl }) {
   return query ? `${path}?${query}` : path;
 }
 
-export default function VidapiTester() {
+// Link para compartir la película actual, ej: /cineclub-total?id=tt2280160
+function buildShareUrl({ type, id, season, episode, subUrl }) {
+  const params = new URLSearchParams({ id });
+  if (type === "tv") {
+    params.set("type", "tv");
+    params.set("season", season || "1");
+    params.set("episode", episode || "1");
+  }
+  if (subUrl) params.set("sub", subUrl);
+  return `${window.location.origin}${window.location.pathname}?${params}`;
+}
+
+async function fetchSubs({ type, id, season, episode, lang }) {
+  const params = new URLSearchParams({ id, lang: lang || "es" });
+  if (type === "tv") {
+    params.set("season", season || "1");
+    params.set("episode", episode || "1");
+  }
+  try {
+    const response = await fetch(`/api/subtitulos?${params}`);
+    const data = await response.json();
+    return data.subtitles ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export default function VidapiTester({ initial = {} }) {
+  const fromUrl = Boolean(initial.id);
   const [form, setForm] = useState({
-    type: "movie",
-    id: "1240889",
-    season: "1",
-    episode: "1",
+    type: initial.type === "tv" ? "tv" : "movie",
+    id: initial.id || "1240889",
+    season: initial.season || "1",
+    episode: initial.episode || "1",
     lang: "es",
     autoplay: false,
-    subUrl: "",
+    subUrl: initial.sub || "",
   });
-  const [src, setSrc] = useState(() => buildEmbedUrl(form));
+  // Si viene un ID en la URL esperamos a buscar subtítulos antes de cargar el reproductor
+  const [src, setSrc] = useState(() => (fromUrl && !initial.sub ? null : buildEmbedUrl(form)));
   const [events, setEvents] = useState([]);
-  const [subs, setSubs] = useState({ loading: false, list: null });
+  const [subs, setSubs] = useState({ loading: fromUrl, list: null });
+  const [copied, setCopied] = useState(false);
 
   const previewUrl = useMemo(() => buildEmbedUrl(form), [form]);
 
@@ -71,28 +101,48 @@ export default function VidapiTester() {
   const update = (key) => (e) =>
     setForm((f) => ({ ...f, [key]: e.target.type === "checkbox" ? e.target.checked : e.target.value }));
 
+  // Con un ID en la URL: busca subtítulos y carga el reproductor con el primero (o con ?sub= si viene)
+  useEffect(() => {
+    if (!fromUrl) return;
+    let cancelled = false;
+    fetchSubs(form).then((list) => {
+      if (cancelled) return;
+      setSubs({ loading: false, list });
+      if (initial.sub) return;
+      const loaded = { ...form, subUrl: list[0]?.url ?? "" };
+      setForm(loaded);
+      setSrc(buildEmbedUrl(loaded));
+    });
+    return () => {
+      cancelled = true;
+    };
+    // Solo al montar: el estado inicial viene de la URL
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Busca subtítulos para el ID actual a través de /api/subtitulos (Wyzie Subs)
   const searchSubs = async () => {
     if (!form.id) return;
     setSubs({ loading: true, list: null });
-    const params = new URLSearchParams({ id: form.id, lang: form.lang || "es" });
-    if (form.type === "tv") {
-      params.set("season", form.season || "1");
-      params.set("episode", form.episode || "1");
-    }
-    try {
-      const response = await fetch(`/api/subtitulos?${params}`);
-      const data = await response.json();
-      setSubs({ loading: false, list: data.subtitles ?? [] });
-    } catch {
-      setSubs({ loading: false, list: [] });
-    }
+    setSubs({ loading: false, list: await fetchSubs(form) });
   };
 
   const load = (e) => {
     e.preventDefault();
     setEvents([]);
     setSrc(previewUrl);
+    // Deja la URL lista para compartir sin recargar la página
+    window.history.replaceState(null, "", buildShareUrl(form));
+  };
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(buildShareUrl(form));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Sin permiso de portapapeles: la URL ya queda en la barra al cargar
+    }
   };
 
   return (
@@ -188,6 +238,15 @@ export default function VidapiTester() {
           Cargar reproductor
         </button>
 
+        <button
+          type="button"
+          onClick={copyLink}
+          disabled={!form.id}
+          className="w-full border border-white/20 text-white/80 text-xs rounded-md py-2 hover:border-white/50 hover:text-white transition-colors disabled:opacity-40"
+        >
+          {copied ? "¡Link copiado!" : "Copiar link para compartir"}
+        </button>
+
         <p className="text-white/30 text-[11px] break-all">{previewUrl}</p>
       </form>
 
@@ -204,7 +263,7 @@ export default function VidapiTester() {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-white/30 text-sm">
-              Escribe un ID y carga el reproductor
+              {subs.loading ? "Buscando subtítulos…" : "Escribe un ID y carga el reproductor"}
             </div>
           )}
         </div>

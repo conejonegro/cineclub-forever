@@ -5,7 +5,10 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function VidapiTestPage() {
+export default async function VidapiTestPage({ searchParams }) {
+  // Permite compartir links directos, ej: /cineclub-total?id=tt2280160
+  const { id, type, season, episode, sub } = await searchParams;
+
   return (
     <main className="min-h-screen bg-[#0d0d0d]">
       <div className="max-w-6xl mx-auto px-6 md:px-14 py-14">
@@ -28,7 +31,7 @@ export default function VidapiTestPage() {
           </p>
         </div>
 
-        <VidapiTester />
+        <VidapiTester initial={{ id, type, season, episode, sub }} />
       </div>
     </main>
   );
